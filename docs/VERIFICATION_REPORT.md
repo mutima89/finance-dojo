@@ -11,7 +11,8 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 | **Windows `Finance_Commercial_Training.exe`** | **Built** with PyInstaller 6.11.1 running on Windows Python under Wine (`scripts/build_exe_with_wine.sh`). The result is a 64-bit Windows GUI executable (PE32+, x86-64), one-folder build, 190 MB unzipped and 83 MB zipped |
 | Exe self-test (`--self-test`) | **PASS, 29/29 under Wine:** all 12 screens open in both themes, and the RevPAR, NPV and answer-key grading checks pass |
 | Exe started normally as a window | **Done under Wine on a virtual display.** The window rendered correctly in the dark theme and the progress database was created in the data folder |
-| **Exe on a real Windows 10/11 PC** | **Not tested.** Wine is a compatibility layer, not Windows. Run `--self-test` on the target PC (see README) or rebuild there with `build_windows.bat` |
+| **Real Windows (GitHub Actions `windows-latest`, Windows Server 2025, 10.0.26100)** | **Passed** ([run 1](https://github.com/mutima89/finance-commercial-training-simulator/actions/runs/38874275356)). Tests: **163 passed, 1 skipped** (LibreOffice is not installed there). The exe was built with PyInstaller on Windows and **its `--self-test` passed 29/29** using Qt's native Windows platform (not offscreen). Every push to `main` repeats this |
+| **Exe on a Windows 10/11 desktop PC** | Not yet confirmed by a person. Windows Server 2025 shares the Windows 11 code base, but run `--self-test` on your PC once to be sure |
 | All 12 screens open, in dark and light themes | **Verified headless** on Linux and with Windows Python under Wine |
 | Every enabled button on every screen clicked without an error | **Verified headless** (`tests/test_ui_smoke.py`) |
 | Startup and shutdown | **Verified:** closing the app closes the database cleanly, and a second start shows the same progress, theme and resume point (`test_startup_shutdown_persistence`) |
