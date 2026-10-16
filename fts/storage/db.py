@@ -39,9 +39,13 @@ CREATE TABLE IF NOT EXISTS capstone(item_id TEXT PRIMARY KEY, answer TEXT, updat
 CREATE TABLE IF NOT EXISTS capstone_scores(
     id INTEGER PRIMARY KEY AUTOINCREMENT, total REAL, passed INTEGER, detail TEXT, ts TEXT);
 CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT, detail TEXT, ts TEXT);
+CREATE TABLE IF NOT EXISTS xp(
+    id INTEGER PRIMARY KEY AUTOINCREMENT, source TEXT, ref TEXT, amount INTEGER, note TEXT, ts TEXT,
+    UNIQUE(source, ref));
 """
 
-DEFAULT_SETTINGS = {"theme": "dark", "max_attempts": "3", "student_name": "", "font_size": "10"}
+DEFAULT_SETTINGS = {"theme": "dark", "max_attempts": "3", "student_name": "", "font_size": "10",
+                    "daily_goal": "50", "celebrations": "1", "reduce_motion": "0", "focus_minutes": "10"}
 
 
 def now() -> str:
@@ -97,6 +101,9 @@ class Progress:
 
     def log(self, kind: str, detail: str = ""):
         self._x("INSERT INTO events(kind, detail, ts) VALUES(?,?,?)", [kind, detail, now()])
+
+    def logged(self, kind: str, detail: str) -> bool:
+        return bool(self._q("SELECT 1 FROM events WHERE kind=? AND detail=? LIMIT 1", [kind, detail]))
 
     # ----------------------------------------------------------- exercises
     def _ensure_status(self, ex, lesson_id, module_id):
@@ -235,6 +242,48 @@ class Progress:
         r = self._q("SELECT * FROM capstone_scores ORDER BY total DESC LIMIT 1")
         return dict(r[0]) if r else None
 
+    # ------------------------------------------------------------------ XP
+    def add_xp(self, source: str, ref: str, amount: int, note: str = "", ts: Optional[str] = None) -> bool:
+        """Award XP once per (source, ref). Returns True only when it was newly awarded."""
+        if amount <= 0:
+            return False
+        cur = self.conn.execute("INSERT OR IGNORE INTO xp(source, ref, amount, note, ts) VALUES(?,?,?,?,?)",
+                                [source, ref, int(amount), note, ts or now()])
+        self.conn.commit()
+        return cur.rowcount == 1
+
+    def has_xp(self, source: str, ref: str) -> bool:
+        return bool(self._q("SELECT 1 FROM xp WHERE source=? AND ref=?", [source, ref]))
+
+    def xp_total(self) -> int:
+        return int(self._q("SELECT COALESCE(SUM(amount),0) t FROM xp")[0]["t"])
+
+    def xp_on(self, day: dt.date) -> int:
+        return int(self._q("SELECT COALESCE(SUM(amount),0) t FROM xp WHERE substr(ts,1,10)=?",
+                           [day.isoformat()])[0]["t"])
+
+    def xp_count_on(self, source: str, day: dt.date) -> int:
+        return int(self._q("SELECT COUNT(*) n FROM xp WHERE source=? AND substr(ts,1,10)=?",
+                           [source, day.isoformat()])[0]["n"])
+
+    def active_days(self) -> list[dt.date]:
+        return [dt.date.fromisoformat(r["d"]) for r in self._q("SELECT DISTINCT substr(ts,1,10) d FROM xp")]
+
+    def xp_by_day(self, days: int = 14) -> dict[dt.date, int]:
+        since = (dt.date.today() - dt.timedelta(days=days - 1)).isoformat()
+        return {dt.date.fromisoformat(r["d"]): int(r["t"]) for r in self._q(
+            "SELECT substr(ts,1,10) d, SUM(amount) t FROM xp WHERE substr(ts,1,10)>=? GROUP BY d", [since])}
+
+    def int_setting(self, key: str, allowed: tuple[int, ...], default: int) -> int:
+        try:
+            v = int(self.setting(key))
+        except ValueError:
+            return default
+        return v if v in allowed else default
+
+    def flag(self, key: str) -> bool:
+        return self.setting(key) == "1"
+
     # -------------------------------------------------------- backup/reset
     def backup(self, dest: Path) -> Path:
         dest = Path(dest)
@@ -269,7 +318,7 @@ class Progress:
 
     def reset(self):
         for t in ("attempts", "exercise_status", "quiz_answers", "quiz_results", "lesson_progress", "tasks",
-                  "workbook_results", "capstone", "capstone_scores", "events"):
+                  "workbook_results", "capstone", "capstone_scores", "events", "xp"):
             self.conn.execute(f"DELETE FROM {t}")
-        self.conn.execute("DELETE FROM meta WHERE key='last_lesson'")
+        self.conn.execute("DELETE FROM meta WHERE key IN ('last_lesson', 'xp_backfilled')")
         self.conn.commit()

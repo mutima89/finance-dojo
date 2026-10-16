@@ -7,8 +7,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from PySide6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QMessageBox, QSpinBox
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QMessageBox,
+                               QSpinBox)
 
+from ...core import gamify
 from ...data import generator as gen
 from ...paths import exports_dir, user_data_dir
 from ...reports import export
@@ -67,6 +69,38 @@ class SettingsScreen(Screen):
                        "recorded.", "Muted"))
         self.body.addWidget(pref)
 
+        fun = Card("Motivation & focus")
+        g2 = QGridLayout()
+        self.goal = QComboBox()
+        for v in gamify.DAILY_GOAL_CHOICES:
+            self.goal.addItem({30: "Gentle", 50: "Steady", 100: "Ambitious"}.get(v, "") + f" · {v} XP a day", v)
+        self.goal.setCurrentIndex(gamify.DAILY_GOAL_CHOICES.index(
+            db.int_setting("daily_goal", gamify.DAILY_GOAL_CHOICES, gamify.DEFAULT_DAILY_GOAL)))
+        self.goal.currentIndexChanged.connect(lambda i: self._set("daily_goal", self.goal.itemData(i)))
+        g2.addWidget(label("Daily goal", wrap=False), 0, 0)
+        g2.addWidget(self.goal, 0, 1)
+        self.focus = QComboBox()
+        for v in gamify.FOCUS_CHOICES:
+            self.focus.addItem(f"{v} minutes", v)
+        self.focus.setCurrentIndex(gamify.FOCUS_CHOICES.index(
+            db.int_setting("focus_minutes", gamify.FOCUS_CHOICES, gamify.DEFAULT_FOCUS_MINUTES)))
+        self.focus.currentIndexChanged.connect(lambda i: self._set("focus_minutes", self.focus.itemData(i)))
+        g2.addWidget(label("Focus timer length", wrap=False), 1, 0)
+        g2.addWidget(self.focus, 1, 1)
+        self.cele = QCheckBox("Show XP pop-ups and celebrations")
+        self.cele.setChecked(db.flag("celebrations"))
+        self.cele.toggled.connect(lambda on: self._set("celebrations", int(on)))
+        g2.addWidget(self.cele, 2, 0, 1, 2)
+        self.calm = QCheckBox("Reduce motion (no confetti or fades)")
+        self.calm.setChecked(db.flag("reduce_motion"))
+        self.calm.toggled.connect(lambda on: self._set("reduce_motion", int(on)))
+        g2.addWidget(self.calm, 3, 0, 1, 2)
+        g2.setColumnStretch(1, 1)
+        fun.add(g2)
+        fun.add(label("Short focus blocks and small daily goals help if your attention wanders. XP and belts "
+                      "are for momentum only; they never change your skill scores.", "Muted"))
+        self.body.addWidget(fun)
+
         data = Card("Your progress data")
         data.add(label(f"Progress database: {db.path}", "Muted"))
         data.add(label(f"Exports folder: {exports_dir()}", "Muted"))
@@ -100,6 +134,10 @@ class SettingsScreen(Screen):
                         "are fictional training data, not industry benchmarks. Forecasts and valuations in the app "
                         "are illustrative estimates, never guarantees. " + export.DISCLAIMER_CERT))
         self.body.addWidget(about)
+
+    def _set(self, key, value):
+        self.ctx.db.set_setting(key, value)
+        self.ctx.window.refresh_xp()
 
     def _font(self, v):
         self.ctx.db.set_setting("font_size", v)
@@ -155,7 +193,10 @@ class SettingsScreen(Screen):
             win.stack.removeWidget(w)
             w.deleteLater()
             del win.screens[key]
+        from ..app import backfill_xp
+        backfill_xp(self.ctx.db)
         self.ctx.set_theme(self.ctx.db.setting("theme"))
+        win.refresh_xp()
         info(self, "Done", msg)
 
     def export_key(self):

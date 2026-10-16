@@ -117,6 +117,85 @@ def test_exercise_flow(env):
     st = win.db.exercise_state(w.ex.id)
     assert st["solved"] and st["solved_on"] == 2
     assert not w.btn_check.isEnabled()
+    xp = win.db._q("SELECT amount FROM xp WHERE source='exercise' AND ref=?", [w.ex.id])
+    assert [r["amount"] for r in xp] == [12]                         # solved on the second try
+    _no_errors(env)
+
+
+def test_daily_quests_and_xp(env):
+    import datetime as dt
+    from fts.core import gamify
+    from fts.core.checker import format_value
+    from fts.ui.screens.dojo import QuestCard
+    win = env["win"]
+    win.db.set_setting("celebrations", "1")
+    win.db._x("DELETE FROM events WHERE kind='quest_revealed'")       # the click-everything test revealed them
+    win.db._x("DELETE FROM xp WHERE source='quest'")
+    if "dojo" in win.screens:
+        win.screens["dojo"].day = None                                  # rebuild today's cards
+    win.navigate("dojo")
+    cards = [c for c in win.screens["dojo"].findChildren(QuestCard) if c.source == "quest"]
+    assert len(cards) == 3
+    total = win.db.xp_total()
+    today = dt.date.today().isoformat()
+    a, b = cards[0], cards[1]
+    a.input.setText(format_value(a.ch.expected * 3 + 7, a.ch.unit, 2))   # wrong first
+    a.check()
+    assert not win.db.has_xp("quest", f"{today}:{a.ch.id}")
+    a.input.setText(format_value(a.ch.expected, a.ch.unit, 2))
+    a.check()
+    assert win.db.has_xp("quest", f"{today}:{a.ch.id}")
+    assert win.db.xp_total() >= total + gamify.QUEST_XP
+    assert win.fun.toast.isVisible()
+    b.reveal()                                                          # shown answer: no XP
+    assert not win.db.has_xp("quest", f"{today}:{b.ch.id}")
+    assert not b.btn_check.isEnabled()
+    win.screens["dojo"].roll()                                          # quick-fire practice
+    assert win.screens["dojo"].quick_card is not None
+    win.navigate("home")
+    assert "Daily quests (1 left)" in win.screens["home"].btn_quests.text()
+    _no_errors(env)
+
+
+def test_focus_timer_and_calm_settings(env):
+    win = env["win"]
+    panel = win.xp_panel
+    panel.toggle_focus()
+    assert "stop" in panel.focus_btn.text()
+    before = win.db.xp_total()
+    panel.focus_end = 0.0                                               # pretend the time is up
+    panel._focus_tick()
+    assert panel.focus_end is None and win.db.xp_total() == before + 10
+    win.fun.confetti.timer.stop()                                       # end the focus celebration
+    win.fun.confetti.hide()
+    win.db.set_setting("reduce_motion", "1")
+    win.fun.notify("Calm", "no confetti", big=True)
+    assert not win.fun.confetti.isVisible()
+    win.db.set_setting("celebrations", "0")
+    win.fun.toast.hide()
+    win.fun.toast.queue.clear()
+    win.fun.toast.timer.stop()
+    win.fun.notify("Hidden", "celebrations are off")
+    assert not win.fun.toast.isVisible()
+    win.db.set_setting("celebrations", "1")
+    win.db.set_setting("reduce_motion", "0")
+    _no_errors(env)
+
+
+def test_home_next_step_opens_the_right_lesson_step(env):
+    win = env["win"]
+    win.navigate("home")
+    home = win.screens["home"]
+    lesson, step = home._next
+    home.go()
+    if lesson is None:
+        assert win.current == "capstone"
+    else:
+        lessons = win.screens["lessons"]
+        assert win.current == "lessons" and lessons.lesson.id == lesson.id
+        assert lessons.tabs.currentIndex() == step
+        lessons._move(1)
+        assert lessons.tabs.currentIndex() == min(step + 1, lessons.tabs.count() - 1) or step == 6
     _no_errors(env)
 
 

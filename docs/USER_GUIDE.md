@@ -54,16 +54,17 @@ Problems? See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt     # Windows: .venv\Scripts\pip
 .venv/bin/python main.py
-.venv/bin/python -m pytest -q                     # 168 tests
+.venv/bin/python -m pytest -q                     # 217 tests
 ```
 
 ## 3. What is inside the app
 
 | Screen | What you do there |
 |---|---|
-| **Home** | Overall progress, mastery by skill, "resume where I left off", weak topics |
+| **Home** | Your next 5-minute step (one button), belt, streak and today's goal, then overall progress, mastery by skill, "resume where I left off" and weak topics |
+| **Daily Dojo** | Three one-minute quests from everyday life each day (coffee cart break-even, gym cost per visit, grocery budget variance, a side-hustle NPV and more), endless quick-fire practice, your belt path and XP for the last 14 days |
 | **Training Roadmap** | The 8 modules, lesson status and the job-ready requirements |
-| **Module Lessons** | 16 lessons. Each has 7 tabs: concept, worked example, guided practice, independent practice, business interpretation, quiz and practical task |
+| **Module Lessons** | 16 lessons, each in 7 short steps (Learn, See it, Try with help, Try alone, Business view, Quiz, Task) with a "Next step" button. Every lesson opens with its key idea in one sentence and an everyday example |
 | **Financial Calculator** | Occupancy/ADR/RevPAR, variance, contribution & break-even, NPV/IRR/payback, time value of money, working capital. Each result shows its formula |
 | **Excel Workbook Center** | Create a practice `.xlsx`, work in Excel, then grade the saved file. The Formula Lab lets you practise the same 16 tasks without Excel |
 | **Hotel RM Simulator** | The Aurelia Grand (fictional 150-room luxury hotel): monthly KPIs vs budget, daily demand, segments & channels, rate scenarios with elasticity, booking pace and 30-day forecast, data-quality edge cases |
@@ -73,9 +74,23 @@ python3.12 -m venv .venv
 | **Capstone Project** | 8 steps on messy hotel data: clean, KPIs, forecast, variances, two decisions, dashboard, executive recommendation and a simulated management meeting. Scored out of 100 with a pass mark of 70 |
 | **Progress & Competency** | Skill levels, weak topics, quiz history, accuracy and active study time. Export as HTML or Excel |
 | **Reference & Interview Prep** | 54 glossary terms, 28 formulas, 18 common mistakes and 20 interview questions with answer outlines. All searchable |
-| **Settings & Backup** | Dark/light theme, attempts before the solution is shown (default 3), text size, student name, backup/restore/reset, and instructor exports |
+| **Settings & Backup** | Dark/light theme, attempts before the solution is shown (default 3), text size, student name, daily goal, focus timer length, celebrations on/off, reduce motion, backup/restore/reset, and instructor exports |
 
 **Content in numbers:** 8 modules, 16 lessons, 58 auto-checked exercises (23 practical), 48 quiz questions, 16 practical tasks, 16 Excel workbook tasks and a 100-point capstone. Practice cases include the hotel, a retail business (Harbor Lane Outfitters) and small commercial projects such as a restaurant promotion, a spa expansion and a meeting-room conversion. All of them are fictional.
+
+### Built to keep you going (ADHD-friendly by design)
+- **One next step.** Home shows a single "Start now" button that opens the exact lesson step to do next, so you never have to decide where to begin.
+- **Small chunks.** Each lesson is split into 7 steps of a few minutes, with "Step 3 of 7" and a "Next step" button.
+- **Real life first.** Each lesson starts with a one-sentence key idea and an everyday example. The Daily Dojo turns the same formulas into one-minute puzzles about coffee carts, gym fees, phone bills and side hustles. All scenarios and prices are made up for practice.
+- **Quick wins.** Correct answers earn XP straight away with a short pop-up. XP fills up belts from White to Black, and a big win (a new belt, a finished lesson, your daily goal) gets a burst of confetti.
+- **A kind streak.** Your streak counts the days you practise. It survives one rest day in a row, and XP and belts never go down.
+- **Focus timer.** Start a 5, 10, 15 or 25-minute focus block from the sidebar. When it ends you get XP and a reminder to take a short break.
+- **Your settings.** Pick a gentle (30 XP), steady (50 XP) or ambitious (100 XP) daily goal. Turn pop-ups off, or keep them and switch on *reduce motion* to drop the confetti and fades.
+- **Encouraging feedback.** Wrong answers get a specific diagnosis plus a short, kind nudge to try again.
+
+**How XP is earned:** an exercise solved on the first try gives 20 XP (15 if you used hints), 12 on the second try and 8 later. A revealed solution gives 0. Quizzes give 5 XP per correct answer, but only when you beat your best score. A saved practical task gives 25 and a finished lesson 50. Daily quests give 15, quick-fire practice 5 (the first 10 a day), a finished focus block 10, and reaching your daily goal a 20 XP bonus. Progress made before XP existed is credited once, dated when it happened.
+
+**XP and belts are for fun and momentum only.** They never change your skill scores or levels below, and a belt is not a qualification.
 
 ### How answers are checked
 - **Number formats:** answers accept `75%`, `0.75` or `75`, plus `$1,234`, `1.2k`, `3.5m`, `(500)` for negatives, and units such as `3.9 years`.
@@ -114,19 +129,19 @@ The app **creates and reads `.xlsx` files**. It does **not** open, control or ed
 
 ```
 main.py                         entry point (also: main.py --self-test)
-fts/core/                       calculations: metrics, forecast, FP&A, answer checker, mastery rules
+fts/core/                       calculations: metrics, forecast, FP&A, answer checker, mastery rules, XP and belts (gamify.py)
 fts/data/                       deterministic fictional data generator (seed 2025)
 fts/excel/                      workbook builder, grader and Excel formula engine
-fts/content/                    curriculum, quizzes, capstone, glossary/reference
+fts/content/                    curriculum, quizzes, capstone, glossary/reference, real-life quests (life.py)
 fts/storage/db.py               SQLite progress store, backup/restore
 fts/reports/export.py           Excel/HTML exports, competency report, answer key
-fts/ui/                         PySide6 app: main window, theme, widgets, 12 screens
+fts/ui/                         PySide6 app: main window, theme, widgets, 14 screens, pop-ups and focus timer (fun.py)
 datasets/                       CSV/JSON datasets (generated; same bytes as the generator)
 workbooks/                      practice workbook + instructor answer-key workbook
 docs/ANSWER_KEY.md              instructor answer key for every exercise, quiz, workbook task and capstone item
 docs/TROUBLESHOOTING.md         build and runtime problems
 docs/VERIFICATION_REPORT.md     what was tested, how, and what was not
-tests/                          168 automated tests (pytest)
+tests/                          217 automated tests (pytest)
 scripts/generate_assets.py      regenerate datasets, workbooks and the answer key
 scripts/make_icon.py            draws assets/app.ico
 scripts/build_exe_with_wine.sh  builds the Windows exe on Linux with Wine

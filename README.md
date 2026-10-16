@@ -26,6 +26,19 @@ Many finance graduates know the theory but have rarely built a model, reconciled
 
 The main case study is **The Aurelia Grand**, a fictional 150-room luxury hotel. A fictional retailer and several small commercial projects provide extra practice.
 
+## Built to keep you going
+
+Studying finance alone can feel dry, so Finance Dojo is designed to be easy to start and hard to put down, including for people with ADHD:
+
+- **One button to start.** Home always shows your *next 5-minute step* and opens it for you.
+- **Bite-size lessons.** Every lesson is 7 short steps with a *Next step* button, a one-sentence **key idea** and an **everyday example** ("a cinema that's half full at full price can earn the same as one that's full at half price").
+- **Daily Dojo.** Three new one-minute quests each day from real life (a coffee cart's break-even, what a gym visit really costs, your grocery budget variance, whether a camera side hustle has a positive NPV) plus endless quick-fire practice. Each one says where the same maths shows up at work.
+- **XP, belts and a kind streak.** Instant XP for correct answers, belts from White to Black, confetti for big wins, a daily goal, and a streak that survives a rest day.
+- **Focus timer.** Start a 5 to 25-minute focus block from the sidebar and get a break reminder at the end.
+- **Calm controls.** Choose a gentle, steady or ambitious daily goal, turn pop-ups off, or reduce motion.
+
+XP and belts are only for momentum. Your skill levels and the job-ready rules below are unchanged.
+
 ## Features
 
 - **8 modules and 16 lessons.** Each lesson follows Concept → Worked example → Guided practice → Independent practice → Business interpretation → Quiz → Practical task.
@@ -46,14 +59,17 @@ The main case study is **The Aurelia Grand**, a fictional 150-room luxury hotel.
   - job-ready **requires the practical tasks and a passed capstone**, never quiz scores alone;
   - weak-topic detection, active study time and exportable competency reports (HTML or Excel).
 - **Reference:** a searchable glossary (54 terms), formula sheet (28), common mistakes (18) and interview questions with model answer outlines (20).
+- **Motivation layer:** XP, belts, a forgiving streak, daily goal, daily real-life quests and a focus timer (see above).
 - **Dark and light themes**, local SQLite progress with backup, restore and reset, and no accounts or internet needed.
 
 ## Screenshots
 
 | | |
 |---|---|
-| <img src="docs/screenshots/lesson_dark.png" alt="Guided practice in a lesson"> | <img src="docs/screenshots/rm_simulator_light.png" alt="Hotel RM simulator"> |
-| **Guided practice** with step-by-step help and instant checking | **Hotel RM simulator:** monthly KPIs vs budget |
+| <img src="docs/screenshots/dojo_light.png" alt="Daily Dojo with real-life quests"> | <img src="docs/screenshots/lesson_dark.png" alt="A lesson step with its key idea"> |
+| **Daily Dojo:** one-minute quests from everyday life, XP, belt and streak | **Lessons in 7 short steps** with a key idea, a real-life hook and instant checking |
+| <img src="docs/screenshots/rm_simulator_light.png" alt="Hotel RM simulator"> | <img src="docs/screenshots/excel_center_light.png" alt="Excel Workbook Center"> |
+| **Hotel RM simulator:** monthly KPIs vs budget | **Excel Workbook Center:** build in Excel, get graded by the app |
 | <img src="docs/screenshots/fpa_lab_dark.png" alt="FP&A variance analysis"> | <img src="docs/screenshots/business_case_light.png" alt="Business case evaluator"> |
 | **FP&A lab:** actual vs budget with F/U and the largest variances | **Business cases:** NPV, IRR, payback and ROI side by side |
 | <img src="docs/screenshots/capstone_dark.png" alt="Capstone dashboard step"> | <img src="docs/screenshots/progress_light.png" alt="Progress and competency report"> |
@@ -81,18 +97,19 @@ dist\Finance_Dojo\Finance_Dojo.exe
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt      # Windows: .venv\Scripts\pip
 .venv/bin/python main.py                           # run the app
-QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q   # 168 tests
+QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q   # 217 tests
 ```
 
 On Linux without Windows you can still produce the Windows exe with Wine: `scripts/build_exe_with_wine.sh`.
 
 ## Testing
 
-- **168 automated tests:**
+- **217 automated tests:**
   - every finance formula is checked against **hand-calculated** values (occupancy, ADR, RevPAR, variances, contribution, break-even, NPV, IRR, payback, forecast reconciliation and division by zero);
   - the fictional datasets are checked to reconcile (the balance sheet balances, and cash flow ties out);
   - the Excel grader and formula engine are tested, and the answer-key workbook is recalculated by LibreOffice;
   - mastery rules, persistence, and backup and restore are tested;
+  - every real-life quest answer is re-worked by hand across 40 generated variants, and XP, belts and the streak rules are tested;
   - a headless UI test opens every screen and clicks every button.
 - **CI:** every push is built and tested on `windows-latest` by GitHub Actions. That run covers the tests, the PyInstaller build and the exe's own `--self-test`.
 - **Verification report:** [docs/VERIFICATION_REPORT.md](docs/VERIFICATION_REPORT.md) states exactly what was tested, where, and what was not.
@@ -101,13 +118,13 @@ On Linux without Windows you can still produce the Windows exe with Wine: `scrip
 
 ```
 main.py               entry point (python main.py, or --self-test)
-fts/core/             calculations: metrics, forecasting, FP&A, answer checker, mastery rules
+fts/core/             calculations: metrics, forecasting, FP&A, answer checker, mastery rules, XP and belts
 fts/data/             deterministic fictional data generator (seed 2025)
 fts/excel/            .xlsx builder, grader and Excel formula engine
-fts/content/          curriculum, quizzes, capstone, glossary and interview prep
+fts/content/          curriculum, quizzes, capstone, glossary, interview prep and real-life quests
 fts/storage/          SQLite progress store with backup/restore
 fts/reports/          Excel/HTML exports, competency report, answer key
-fts/ui/               PySide6 main window, themes, widgets and the 12 screens
+fts/ui/               PySide6 main window, themes, widgets, pop-ups, focus timer and the 14 screens
 datasets/             generated CSV/JSON training data
 workbooks/            practice workbook and instructor answer-key workbook
 docs/                 user guide, answer key, troubleshooting, verification report, screenshots

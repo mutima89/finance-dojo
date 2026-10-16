@@ -1,6 +1,7 @@
 """Main window, navigation and the shared application context."""
 from __future__ import annotations
 
+import datetime as dt
 import importlib
 import sys
 import time
@@ -17,15 +18,17 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel, QListW
 from ..content import curriculum
 from ..paths import resource_root
 from ..content.base import SKILLS
-from ..core import mastery
+from ..core import gamify, mastery
 from ..storage.db import Progress
 from . import theme
+from .fun import Celebrator, XpPanel
 
 APP_TITLE = "Finance Dojo"
 
 # key: (navigation title, module path, class name)
 SCREENS = {
     "home": ("Home", "home", "HomeScreen"),
+    "dojo": ("Daily Dojo", "dojo", "DojoScreen"),
     "roadmap": ("Training Roadmap", "roadmap", "RoadmapScreen"),
     "lessons": ("Module Lessons", "lessons", "LessonsScreen"),
     "calculator": ("Financial Calculator", "calculator", "CalculatorScreen"),
@@ -71,6 +74,29 @@ class Ctx:
 
     def skill_level(self, skill: str) -> str:
         return next((s.level for s in self.skills() if s.skill == skill), mastery.LEVELS[0])
+
+    # motivation ------------------------------------------------------------
+    def award(self, source: str, ref: str, amount: int, note: str = "", big: bool = False) -> bool:
+        """Give XP once per (source, ref) and celebrate it. Never affects mastery."""
+        db = self.db
+        before = gamify.rank(db.xp_total())
+        today = dt.date.today()
+        goal = db.int_setting("daily_goal", gamify.DAILY_GOAL_CHOICES, gamify.DEFAULT_DAILY_GOAL)
+        had_goal = db.xp_on(today) >= goal
+        if not db.add_xp(source, ref, amount, note):
+            return False
+        self.celebrate(f"+{amount} XP", note, big)
+        if not had_goal and db.xp_on(today) >= goal:
+            db.add_xp("goal", today.isoformat(), gamify.DAILY_GOAL_BONUS, "Daily goal reached")
+            self.celebrate("🎯 Daily goal reached!", f"+{gamify.DAILY_GOAL_BONUS} bonus XP. Great work today.", True)
+        after = gamify.rank(db.xp_total())
+        if after.index > before.index:
+            self.celebrate(f"🥋 New belt: {after.belt.name}!", "You levelled up. " + gamify.BELT_NOTE, True)
+        self.window.refresh_xp()
+        return True
+
+    def celebrate(self, title: str, text: str = "", big: bool = False):
+        self.window.fun.notify(title, text, big)
 
     def set_theme(self, name: str):
         self.db.set_setting("theme", name)
@@ -120,6 +146,9 @@ class MainWindow(QMainWindow):
         tagline = QLabel("Finance & commercial training")
         tagline.setObjectName("BrandSub")
         sl.addWidget(tagline)
+        self.xp_panel = XpPanel(self.ctx)
+        self.xp_panel.focus_done.connect(self._focus_done)
+        sl.addWidget(self.xp_panel)
         self.nav = QListWidget()
         self.nav.setObjectName("Nav")
         for key, (title, *_rest) in SCREENS.items():
@@ -137,6 +166,9 @@ class MainWindow(QMainWindow):
         lay.addWidget(self.stack, 1)
         self.setCentralWidget(root)
         self.statusBar().showMessage(f"Progress saved locally: {self.db.path}")
+        self.fun = Celebrator(root, self.db)
+        backfill_xp(self.db)
+        self.xp_panel.refresh()
         self.apply_theme()
         self.navigate("home")
 
@@ -177,6 +209,27 @@ class MainWindow(QMainWindow):
         if hasattr(w, "on_show"):
             w.on_show(**kwargs)
 
+    # motivation --------------------------------------------------------------
+    def refresh_xp(self):
+        self.xp_panel.refresh()
+        w = self.screens.get(self.current)
+        if w is not None and hasattr(w, "on_xp"):
+            w.on_xp()
+
+    def _focus_done(self):
+        today = dt.date.today()
+        n = self.db.xp_count_on("focus", today)
+        if n < gamify.FOCUS_DAILY_CAP:
+            self.ctx.award("focus", f"{today.isoformat()}:{n}", gamify.FOCUS_XP,
+                           "Focus session done! Stand up, stretch and drink some water.", big=True)
+        else:
+            self.ctx.celebrate("Focus session done!", "Take a short break before the next one.", True)
+
+    def resizeEvent(self, ev):
+        super().resizeEvent(ev)
+        if hasattr(self, "fun"):
+            self.fun.resized()
+
     # theme -----------------------------------------------------------------
     def apply_theme(self):
         try:
@@ -197,6 +250,33 @@ class MainWindow(QMainWindow):
         self.db.log("app_closed")
         self.db.close()
         super().closeEvent(ev)
+
+
+def backfill_xp(db: Progress):
+    """Give XP once for progress made before XP existed, dated when it happened."""
+    if db.meta("xp_backfilled"):
+        return
+    status = db.all_exercise_status()
+    for ex_id, st in status.items():
+        if st.get("solved") and not st.get("revealed"):
+            db.add_xp("exercise", ex_id, gamify.exercise_xp(st.get("solved_on"), st.get("hints_used") or 0),
+                      "Exercise solved", st.get("updated"))
+    tasks = db.all_tasks()
+    quiz_ts = {}
+    for q in db.quiz_history():
+        quiz_ts.setdefault((q["lesson_id"], q["score"]), q["ts"])
+    for m in curriculum.modules():
+        for l in m.lessons:
+            best = db.best_quiz(l.id)
+            if best:
+                db.add_xp("quiz", f"{l.id}:{best[0]}", gamify.quiz_xp(best[0], None), "Quiz",
+                          quiz_ts.get((l.id, best[0])))
+            t = tasks.get(l.task.id)
+            if t and (t.get("content") or "").strip():
+                db.add_xp("task", l.task.id, gamify.TASK_XP, "Practical task saved", t.get("updated"))
+            if mastery.lesson_complete(l, status, best, t):
+                db.add_xp("lesson", l.id, gamify.LESSON_XP, "Lesson complete", t.get("updated"))
+    db.set_meta("xp_backfilled", "1")
 
 
 def self_test(app: QApplication) -> int:

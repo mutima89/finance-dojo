@@ -115,6 +115,39 @@ QAbstractScrollArea::corner {{ background: transparent; }}
 QScrollBar::add-line, QScrollBar::sub-line {{ height: 0; width: 0; }}
 QStatusBar {{ background: {p.surface}; color: {p.muted}; }}
 QToolTip {{ background: {p.surface2}; color: {p.text}; border: 1px solid {p.border}; }}
+QFrame#Toast {{ background: {p.surface2}; border: 1px solid {p.accent}; border-radius: 12px; }}
+QFrame#Toast[big="true"] {{ border: 2px solid {p.good}; }}
+QLabel#ToastTitle {{ font-size: {base_pt + 3}pt; font-weight: 700; color: {p.text}; }}
+QLabel#ToastText {{ color: {p.text2}; }}
+QFrame#XpPanel {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 10px; margin: 2px 4px 8px 4px; }}
+QLabel#XpBelt {{ font-weight: 700; }}
+QLabel#XpStreak {{ font-weight: 700; color: {p.warn}; }}
+QLabel#XpSub {{ color: {p.muted}; font-size: {base_pt - 1}pt; }}
+QProgressBar#XpBar, QProgressBar#GoalBar {{ background: {p.bg}; border-radius: 4px; }}
+QProgressBar#XpBar::chunk {{ background: {p.accent}; border-radius: 4px; }}
+QProgressBar#GoalBar::chunk {{ background: {p.good}; border-radius: 3px; }}
+QPushButton#FocusBtn {{ background: transparent; border: 1px dashed {p.border}; padding: 5px 8px; color: {p.text2}; }}
+QPushButton#FocusBtn:hover {{ border: 1px solid {p.accent}; color: {p.text}; }}
+QFrame#Hero {{ background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 {p.accent}, stop:1 {p.series[6]});
+    border: none; border-radius: 14px; }}
+QFrame#Hero QLabel {{ color: #ffffff; }}
+QFrame#Hero QLabel#HeroMuted {{ color: rgba(255,255,255,0.82); }}
+QFrame#Hero QPushButton {{ background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.45);
+    font-weight: 600; padding: 9px 16px; }}
+QFrame#Hero QPushButton:hover {{ background: rgba(255,255,255,0.28); }}
+QFrame#Hero QPushButton#HeroGo {{ background: #ffffff; color: {p.accent}; border: none; font-size: {base_pt + 2}pt;
+    padding: 11px 22px; }}
+QFrame#Hero QProgressBar {{ background: rgba(255,255,255,0.25); border-radius: 4px; }}
+QFrame#Hero QProgressBar::chunk {{ background: #ffffff; border-radius: 4px; }}
+QFrame#Hook {{ background: {p.surface2}; border: 1px solid {p.border}; border-left: 4px solid {p.series[2]};
+    border-radius: 8px; }}
+QFrame#Quest {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 12px; }}
+QFrame#Quest[done="true"] {{ border: 2px solid {p.good}; }}
+QLabel#Emoji {{ font-size: {base_pt + 12}pt; }}
+QLabel#Chip {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 10px; padding: 2px 9px;
+    color: {p.text2}; font-size: {base_pt - 1}pt; }}
+QLabel#BeltChip {{ border-radius: 10px; padding: 5px 10px; font-weight: 600; }}
+QLabel#StepLbl {{ color: {p.text2}; font-weight: 600; }}
 """
 
 

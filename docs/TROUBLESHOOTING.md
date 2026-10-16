@@ -21,6 +21,8 @@
 | Nothing happens when you start the app | Run it once from a terminal: `Finance_Dojo.exe --self-test`. Then read `%APPDATA%\Finance_Dojo\self_test_report.txt`. |
 | Blank or black window on an old PC or a remote desktop | Graphics driver issue with Qt. Try: `set QT_OPENGL=software` then start the exe from the same terminal. |
 | Text too small or too large | Settings → Text size. |
+| XP pop-ups or confetti are distracting | Settings → Motivation & focus: untick *Show XP pop-ups and celebrations*, or keep them and tick *Reduce motion*. |
+| Emoji show as empty boxes | Your system has no emoji font. Everything still works; on Windows 10/11 the Segoe UI Emoji font is built in. |
 | Charts look wrong after changing theme | Switch screen and back. If they stay wrong, restart the app; progress is saved continuously. |
 | "This file is not a valid progress backup" | Restore only accepts progress backups made by this app (Settings → Back up progress); the file is checked before anything is replaced. Your current progress was not changed. |
 | Restored the wrong backup | The previous progress was saved as `progress.before_restore.sqlite3` in the data folder (Settings → Open data folder). Restore that file. |

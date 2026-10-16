@@ -27,7 +27,7 @@ a = Analysis(
     datas=datas,
     hiddenimports=[
         # screens are imported lazily with importlib, so list them explicitly
-        "fts.ui.screens.home", "fts.ui.screens.roadmap", "fts.ui.screens.lessons",
+        "fts.ui.screens.home", "fts.ui.screens.dojo", "fts.ui.screens.roadmap", "fts.ui.screens.lessons",
         "fts.ui.screens.calculator", "fts.ui.screens.excel_center", "fts.ui.screens.rm_simulator",
         "fts.ui.screens.fpa_lab", "fts.ui.screens.scenario", "fts.ui.screens.business_case",
         "fts.ui.screens.capstone_screen", "fts.ui.screens.progress", "fts.ui.screens.reference",

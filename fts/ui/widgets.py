@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QButtonGroup, QCheckBox, QFile
                                QVBoxLayout, QWidget)
 
 from ..content.base import Exercise, Lesson, Module
-from ..core import mastery
+from ..core import gamify, mastery
 from ..core.checker import check_numeric, format_value
 from ..paths import exports_dir
 from .theme import style_axes
@@ -294,9 +294,15 @@ class ExerciseWidget(Card):
                 self.feedback.setText(f"<span style='color:{p.warn}'>{r.message}</span> (Not counted as an attempt.)")
                 return
             ok, diag, shown = r.correct, r.diagnosis, ans
+        before = self.state()
         st = self.ctx.db.record_attempt(self.ex, self.lesson.id, self.module.id, shown, ok)
         if ok:
-            self._done(True, f"✔ Correct! <br><b>Solution:</b> {self.ex.solution}")
+            cheer = gamify.pick(gamify.CHEER_RIGHT, st["attempts"] + len(self.ex.id))
+            self._done(True, f"✔ Correct! {cheer}<br><b>Solution:</b> {self.ex.solution}")
+            if not before["solved"]:
+                xp = gamify.exercise_xp(st["solved_on"], st["hints_used"], bool(st["revealed"]))
+                tag = "First try! 🎯" if st["solved_on"] == 1 else f"Solved on try {st['solved_on']}"
+                self.ctx.award("exercise", self.ex.id, xp, f"{tag} {cheer}")
         else:
             mx = self.ctx.db.max_attempts()
             if st["attempts"] >= mx:
@@ -308,8 +314,9 @@ class ExerciseWidget(Card):
                 if self.hints_shown < self.allowed_hints():
                     hint = f"<br><i>Hint:</i> {self.ex.hints[self.hints_shown]}"
                     self.hints_shown += 1
+                pep = gamify.pick(gamify.ENCOURAGE_WRONG, st["attempts"])
                 self.feedback.setText(f"<span style='color:{p.bad}'>✘ Not quite.</span> {diag}{hint}"
-                                      f"<br>Attempt {st['attempts']} of {mx}. Try again.")
+                                      f"<br>Attempt {st['attempts']} of {mx}. <i>{pep}</i>")
         self.changed.emit()
 
     def hint(self):
@@ -376,9 +383,14 @@ class QuizWidget(Card):
             results.append((q.id, q.skill, ok))
             rl.setText(f"<span style='color:{p.good if ok else p.bad}'>{'✔ Correct' if ok else '✘ Incorrect'}"
                        f"</span> {'' if ok else '<b>Answer:</b> ' + q.options[q.answer] + '. '}{q.explanation}")
+        prev = self.ctx.db.best_quiz(self.lesson.id)
         self.ctx.db.record_quiz(self.lesson.id, self.module.id, results)
         n = sum(r[2] for r in results)
-        self.score.setText(f"Score: {n}/{len(results)}")
+        self.score.setText(f"Score: {n}/{len(results)}" + (" 🎉" if n == len(results) else ""))
+        xp = gamify.quiz_xp(n, prev[0] if prev else None)
+        if xp:
+            self.ctx.award("quiz", f"{self.lesson.id}:{n}", xp,
+                           "Perfect quiz! 🎉" if n == len(results) else "New best quiz score")
         self.btn.setEnabled(False)
         self.changed.emit()
 
@@ -434,6 +446,7 @@ class TaskWidget(Card):
         self.ctx.db.save_task(self.task.id, self.lesson.id, self.module.id, text,
                               [cb.isChecked() for cb in self.checks])
         self.status.setText("Saved ✔")
+        self.ctx.award("task", self.task.id, gamify.TASK_XP, f"Practical task saved: {self.task.title}")
         self.changed.emit()
 
     def export(self):

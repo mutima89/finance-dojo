@@ -1,12 +1,46 @@
 """Home and learning dashboard."""
 from __future__ import annotations
 
-from PySide6.QtWidgets import QGridLayout, QHBoxLayout, QProgressBar
+import datetime as dt
+
+from PySide6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QProgressBar, QVBoxLayout
 
 from ...content import curriculum
-from ...core import mastery
+from ...core import gamify, mastery
 from ..widgets import Card, Chart, KpiCard, button, label
 from .base import Screen
+from .dojo import quests_left
+
+STEP_LABELS = ["read the key idea", "see a worked example", "try a guided exercise", "try an exercise alone",
+               "read the business view", "take the 3-question quiz", "do the practical task"]
+
+
+def next_step(ctx):
+    """The single most useful next thing to do: (lesson or None, step index, description)."""
+    db = ctx.db
+    status, tasks = db.all_exercise_status(), db.all_tasks()
+
+    def done(e):
+        st = status.get(e.id, {})
+        return st.get("solved") or st.get("revealed")
+
+    for m in curriculum.modules():
+        for l in m.lessons:
+            if mastery.lesson_complete(l, status, db.best_quiz(l.id), tasks.get(l.task.id)):
+                continue
+            seen = db.sections_viewed(l.id)
+            if "concept" not in seen:
+                step = 0
+            elif not done(l.guided):
+                step = 2
+            elif not all(done(e) for e in l.independent):
+                step = 3
+            elif db.best_quiz(l.id) is None:
+                step = 5
+            else:
+                step = 6
+            return l, step, f"Module {m.number} · {l.title}: {STEP_LABELS[step]}"
+    return None, 0, "Every lesson is done. Time for the capstone project!"
 
 
 def overall(ctx):
@@ -33,6 +67,42 @@ class HomeScreen(Screen):
 
     def __init__(self, ctx):
         super().__init__(ctx)
+        hero = QFrame()
+        hero.setObjectName("Hero")
+        hl = QHBoxLayout(hero)
+        hl.setContentsMargins(22, 18, 22, 18)
+        hl.setSpacing(24)
+        left = QVBoxLayout()
+        left.setSpacing(6)
+        left.addWidget(label("YOUR NEXT 5-MINUTE STEP", "HeroMuted"))
+        self.next_lbl = label("", "H2")
+        left.addWidget(self.next_lbl)
+        btns = QHBoxLayout()
+        self.btn_go = button("▶  Start now", self.go, obj="HeroGo")
+        btns.addWidget(self.btn_go)
+        self.btn_quests = button("🎲 Daily quests", lambda: ctx.navigate("dojo"))
+        btns.addWidget(self.btn_quests)
+        btns.addStretch(1)
+        left.addLayout(btns)
+        left.addStretch(1)
+        hl.addLayout(left, 3)
+        right = QVBoxLayout()
+        right.setSpacing(4)
+        self.hero_belt = label("", "H3")
+        self.hero_bar = QProgressBar()
+        self.hero_bar.setRange(0, 1000)
+        self.hero_bar.setTextVisible(False)
+        self.hero_bar.setFixedHeight(8)
+        self.hero_xp = label("", "HeroMuted")
+        self.hero_streak = label("", "H3")
+        self.hero_goal = label("", "HeroMuted")
+        for w in (self.hero_belt, self.hero_bar, self.hero_xp, self.hero_streak, self.hero_goal):
+            right.addWidget(w)
+        right.addStretch(1)
+        hl.addLayout(right, 2)
+        self.body.addWidget(hero)
+        self._next = (None, 0)
+
         q = Card("The four questions every analyst answers")
         q.add(label("1. What do the numbers tell me?   2. Why did the results happen?   "
                     "3. What might happen next?   4. What action should management take?"))
@@ -86,9 +156,37 @@ class HomeScreen(Screen):
                                   "and does not guarantee employment.", "Muted"))
         self.body.addStretch(1)
 
+    def on_xp(self):
+        db = self.ctx.db
+        r = gamify.rank(db.xp_total())
+        self.hero_belt.setText(f"🥋 {r.belt.name}")
+        self.hero_bar.setValue(round(r.fraction * 1000))
+        self.hero_xp.setText(f"{r.xp:,} XP" + (f" · {r.to_next:,} to {r.next_belt.name}" if r.next_belt else ""))
+        today = dt.date.today()
+        s = gamify.streak(db.active_days(), today)
+        self.hero_streak.setText(f"🔥 {s.days}-day streak" if s.days else "🔥 Start a streak today")
+        goal = db.int_setting("daily_goal", gamify.DAILY_GOAL_CHOICES, gamify.DEFAULT_DAILY_GOAL)
+        xp_today = db.xp_on(today)
+        left = quests_left(db, today)
+        self.hero_goal.setText(f"🎯 Today {xp_today}/{goal} XP · " + (f"{left} quest{'s' if left != 1 else ''} left"
+                                                                    if left else "all quests done"))
+        self.btn_quests.setText(f"🎲 Daily quests ({left} left)" if left else "🎲 Quick-fire practice")
+        lesson, step, text = next_step(self.ctx)
+        self._next = (lesson, step)
+        self.next_lbl.setText(text)
+        self.btn_go.setText("▶  Start now" if lesson else "▶  Open the capstone")
+
+    def go(self):
+        lesson, step = self._next
+        if lesson is None:
+            self.ctx.navigate("capstone")
+        else:
+            self.ctx.navigate("lessons", lesson=lesson.id, step=step)
+
     def on_show(self, **kw):
         ctx = self.ctx
         ctx.invalidate()
+        self.on_xp()
         name = ctx.db.setting("student_name").strip()
         self.h1.setText(f"Welcome back, {name}" if name else "Welcome")
         o = overall(ctx)
