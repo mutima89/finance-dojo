@@ -342,67 +342,141 @@ class ExerciseWidget(Card):
 
 
 class QuizWidget(Card):
+    """One question at a time with instant feedback, so it never feels like a wall of text."""
     changed = Signal()
+    LETTERS = "ABCDEFGH"
 
     def __init__(self, ctx, module: Module, lesson: Lesson):
-        super().__init__("Short quiz")
+        super().__init__("Quick quiz")
         self.ctx, self.module, self.lesson = ctx, module, lesson
-        self.groups: list[QButtonGroup] = []
-        self.result_labels: list[QLabel] = []
-        for i, q in enumerate(lesson.quiz, 1):
-            self.add(label(f"<b>{i}. {q.question}</b>", rich=True))
-            g = QButtonGroup(self)
-            for j, opt in enumerate(q.options):
-                rb = QRadioButton(opt)
-                g.addButton(rb, j)
-                self.add(rb)
-            self.groups.append(g)
-            rl = label("", rich=True)
-            self.result_labels.append(rl)
-            self.add(rl)
+        self.qs = lesson.quiz
+        top = QHBoxLayout()
+        self.dots = label("", "QuizDots", wrap=False, rich=True)
+        top.addWidget(self.dots)
+        top.addStretch(1)
+        self.best = label("", "Muted", wrap=False)
+        top.addWidget(self.best)
+        self.add(top)
+        self.question = label("", "H3", rich=True)
+        self.add(self.question)
+        self.opts: list[QPushButton] = []
+        for j in range(max((len(q.options) for q in self.qs), default=0)):
+            b = QPushButton()
+            b.setObjectName("QuizOpt")
+            b.setCursor(Qt.PointingHandCursor)
+            b.clicked.connect(lambda _=False, j=j: self.choose(j))
+            self.opts.append(b)
+            self.add(b)
+        self.feedback = label("", "QuizFeedback", rich=True)
+        self.add(self.feedback)
         row = QHBoxLayout()
-        self.btn = button("Submit quiz", self.submit, primary=True)
-        row.addWidget(self.btn)
-        row.addWidget(button("Clear and retake", self.retake))
+        self.btn_next = button("Next question ▶", self.next_question, primary=True)
+        row.addWidget(self.btn_next)
+        self.btn_retake = button("↺ Retake quiz", self.retake)
+        row.addWidget(self.btn_retake)
         self.score = label("", "H3")
         row.addWidget(self.score)
         row.addStretch(1)
         self.add(row)
-        best = ctx.db.best_quiz(lesson.id)
-        if best:
-            self.score.setText(f"Best score: {best[0]}/{best[1]}")
+        self.retake()
 
-    def submit(self):
-        if any(g.checkedId() < 0 for g in self.groups):
-            self.score.setText("Answer every question first.")
-            return
+    # state -----------------------------------------------------------------
+    def retake(self):
+        self.i = 0
+        self.results: list[tuple[str, str, bool]] = []
+        self.answered = False
+        self.finished = False
+        self.score.setText("")
+        self.btn_retake.setVisible(False)
+        self._show()
+
+    def _paint_dots(self):
         p = self.ctx.pal
-        results = []
-        for q, g, rl in zip(self.lesson.quiz, self.groups, self.result_labels):
-            ok = g.checkedId() == q.answer
-            results.append((q.id, q.skill, ok))
-            rl.setText(f"<span style='color:{p.good if ok else p.bad}'>{'✔ Correct' if ok else '✘ Incorrect'}"
-                       f"</span> {'' if ok else '<b>Answer:</b> ' + q.options[q.answer] + '. '}{q.explanation}")
+        parts = []
+        for k in range(len(self.qs)):
+            if k < len(self.results):
+                c, ch = (p.good, "●") if self.results[k][2] else (p.bad, "●")
+            elif k == self.i and not self.finished:
+                c, ch = p.accent, "●"
+            else:
+                c, ch = p.border, "○"
+            parts.append(f"<span style='color:{c}; font-size:14pt'>{ch}</span>")
+        self.dots.setText("&nbsp;".join(parts))
+        best = self.ctx.db.best_quiz(self.lesson.id)
+        self.best.setText(f"Best score: {best[0]}/{best[1]}" if best else "")
+
+    def _set_state(self, b: QPushButton, state: str):
+        b.setProperty("state", state)
+        b.style().unpolish(b)
+        b.style().polish(b)
+
+    def _show(self):
+        q = self.qs[self.i]
+        self.question.setText(f"Question {self.i + 1} of {len(self.qs)}<br>{q.question}")
+        for j, b in enumerate(self.opts):
+            visible = j < len(q.options)
+            b.setVisible(visible)
+            b.setEnabled(visible)
+            if visible:
+                b.setText(f"{self.LETTERS[j]}   {q.options[j]}".replace("&", "&&"))
+            self._set_state(b, "")
+        self.feedback.setText("Pick one answer. You'll see right away if it's right.")
+        self.btn_next.setVisible(True)
+        self.btn_next.setEnabled(False)
+        self.btn_next.setText("Next question ▶" if self.i < len(self.qs) - 1 else "See my score ▶")
+        self._paint_dots()
+
+    def choose(self, j: int):
+        if self.finished or self.answered or self.i >= len(self.qs) or j >= len(self.qs[self.i].options):
+            return
+        q = self.qs[self.i]
+        ok = j == q.answer
+        self.answered = True
+        self.results.append((q.id, q.skill, ok))
+        for k, b in enumerate(self.opts):
+            b.setEnabled(False)
+            self._set_state(b, "right" if k == q.answer else "wrong" if k == j else "")
+        p = self.ctx.pal
+        seed = len(self.results) + self.i
+        if ok:
+            lead = f"<span style='color:{p.good}'><b>✔ {gamify.pick(gamify.CHEER_RIGHT, seed)}</b></span> "
+        else:
+            lead = (f"<span style='color:{p.bad}'><b>✘ Not this one.</b></span> The answer is "
+                    f"<b>{self.LETTERS[q.answer]}</b>. ")
+        self.feedback.setText(lead + q.explanation)
+        self.btn_next.setEnabled(True)
+        self._paint_dots()
+
+    def next_question(self):
+        if self.finished or not self.answered:
+            return
+        if self.i < len(self.qs) - 1:
+            self.i += 1
+            self.answered = False
+            self._show()
+        else:
+            self._finish()
+
+    def _finish(self):
+        self.finished = True
         prev = self.ctx.db.best_quiz(self.lesson.id)
-        self.ctx.db.record_quiz(self.lesson.id, self.module.id, results)
-        n = sum(r[2] for r in results)
-        self.score.setText(f"Score: {n}/{len(results)}" + (" 🎉" if n == len(results) else ""))
+        self.ctx.db.record_quiz(self.lesson.id, self.module.id, self.results)
+        n, total = sum(r[2] for r in self.results), len(self.results)
+        for b in self.opts:
+            b.setVisible(False)
+        self.btn_next.setVisible(False)
+        self.btn_retake.setVisible(True)
+        self.question.setText(f"You scored {n} out of {total}" + (" 🎉" if n == total else ""))
+        self.feedback.setText("Perfect! On to the practical task." if n == total else
+                              "Good effort. Re-read the explanations, then retake it whenever you like. "
+                              "Only your best score counts.")
+        self.score.setText("")
         xp = gamify.quiz_xp(n, prev[0] if prev else None)
         if xp:
             self.ctx.award("quiz", f"{self.lesson.id}:{n}", xp,
-                           "Perfect quiz! 🎉" if n == len(results) else "New best quiz score")
-        self.btn.setEnabled(False)
+                           "Perfect quiz! 🎉" if n == total else "New best quiz score")
+        self._paint_dots()
         self.changed.emit()
-
-    def retake(self):
-        for g in self.groups:
-            g.setExclusive(False)
-            for b in g.buttons():
-                b.setChecked(False)
-            g.setExclusive(True)
-        for rl in self.result_labels:
-            rl.setText("")
-        self.btn.setEnabled(True)
 
 
 class TaskWidget(Card):

@@ -30,14 +30,19 @@ The main case study is **The Aurelia Grand**, a fictional 150-room luxury hotel.
 
 Studying finance alone can feel dry, so Finance Dojo is designed to be easy to start and hard to put down, including for people with ADHD:
 
+- **A 30-second welcome.** On first launch you pick your name, a daily goal and a focus length, and you're straight in.
 - **One button to start.** Home always shows your *next 5-minute step* and opens it for you.
+- **A reason for every topic.** A short note from Sofia Reyes, the (fictional) General Manager of The Aurelia Grand, tells you why the current module matters this week.
 - **Bite-size lessons.** Every lesson is 7 short steps with a *Next step* button, a one-sentence **key idea** and an **everyday example** ("a cinema that's half full at full price can earn the same as one that's full at half price").
 - **Daily Dojo.** Three new one-minute quests each day from real life (a coffee cart's break-even, what a gym visit really costs, your grocery budget variance, whether a camera side hustle has a positive NPV) plus endless quick-fire practice. Each one says where the same maths shows up at work.
+- **One question at a time.** Quizzes show a single question with big answer buttons, tell you straight away if you're right and explain why, and track progress with dots.
+- **Badges.** 16 badges such as *Quiz ace*, *Quest sweep* and *Week warrior*, each with a visible counter so you can see how close you are.
+- **A tidy sidebar and shortcuts.** Screens are grouped into Start, Learn, Practise and You, so everything fits on a laptop screen. Ctrl+L continues your next step, Ctrl+→ moves through a lesson, Ctrl+T starts the focus timer and F1 lists every shortcut.
 - **XP, belts and a kind streak.** Instant XP for correct answers, belts from White to Black, confetti for big wins, a daily goal, and a streak that survives a rest day.
 - **Focus timer.** Start a 5 to 25-minute focus block from the sidebar and get a break reminder at the end.
 - **Calm controls.** Choose a gentle, steady or ambitious daily goal, turn pop-ups off, or reduce motion.
 
-XP and belts are only for momentum. Your skill levels and the job-ready rules below are unchanged.
+XP, belts and badges are only for momentum. Your skill levels and the job-ready rules below are unchanged.
 
 ## Features
 
@@ -59,7 +64,7 @@ XP and belts are only for momentum. Your skill levels and the job-ready rules be
   - job-ready **requires the practical tasks and a passed capstone**, never quiz scores alone;
   - weak-topic detection, active study time and exportable competency reports (HTML or Excel).
 - **Reference:** a searchable glossary (54 terms), formula sheet (28), common mistakes (18) and interview questions with model answer outlines (20).
-- **Motivation layer:** XP, belts, a forgiving streak, daily goal, daily real-life quests and a focus timer (see above).
+- **Motivation layer:** XP, belts, badges, a forgiving streak, daily goal, daily real-life quests, a focus timer and keyboard shortcuts (see above).
 - **Dark and light themes**, local SQLite progress with backup, restore and reset, and no accounts or internet needed.
 
 ## Screenshots
@@ -68,6 +73,8 @@ XP and belts are only for momentum. Your skill levels and the job-ready rules be
 |---|---|
 | <img src="docs/screenshots/dojo_light.png" alt="Daily Dojo with real-life quests"> | <img src="docs/screenshots/lesson_dark.png" alt="A lesson step with its key idea"> |
 | **Daily Dojo:** one-minute quests from everyday life, XP, belt and streak | **Lessons in 7 short steps** with a key idea, a real-life hook and instant checking |
+| <img src="docs/screenshots/quiz_dark.png" alt="One-question-at-a-time quiz with instant feedback"> | <img src="docs/screenshots/badges_dark.png" alt="Badges and belt path in the Daily Dojo"> |
+| **Quizzes:** one question at a time, with instant feedback | **Badges:** 16 milestones next to the belt path |
 | <img src="docs/screenshots/rm_simulator_light.png" alt="Hotel RM simulator"> | <img src="docs/screenshots/excel_center_light.png" alt="Excel Workbook Center"> |
 | **Hotel RM simulator:** monthly KPIs vs budget | **Excel Workbook Center:** build in Excel, get graded by the app |
 | <img src="docs/screenshots/fpa_lab_dark.png" alt="FP&A variance analysis"> | <img src="docs/screenshots/business_case_light.png" alt="Business case evaluator"> |
@@ -97,20 +104,20 @@ dist\Finance_Dojo\Finance_Dojo.exe
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt      # Windows: .venv\Scripts\pip
 .venv/bin/python main.py                           # run the app
-QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q   # 217 tests
+QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q   # 234 tests
 ```
 
 On Linux without Windows you can still produce the Windows exe with Wine: `scripts/build_exe_with_wine.sh`.
 
 ## Testing
 
-- **217 automated tests:**
+- **234 automated tests:**
   - every finance formula is checked against **hand-calculated** values (occupancy, ADR, RevPAR, variances, contribution, break-even, NPV, IRR, payback, forecast reconciliation and division by zero);
   - the fictional datasets are checked to reconcile (the balance sheet balances, and cash flow ties out);
   - the Excel grader and formula engine are tested, and the answer-key workbook is recalculated by LibreOffice;
   - mastery rules, persistence, and backup and restore are tested;
-  - every real-life quest answer is re-worked by hand across 40 generated variants, and XP, belts and the streak rules are tested;
-  - a headless UI test opens every screen and clicks every button.
+  - every real-life quest answer is re-worked by hand across 40 generated variants, and XP, belts, badges and the streak rules are tested;
+  - a headless UI test opens every screen, clicks every button and walks through the welcome, the quiz, the shortcuts and a badge unlock.
 - **CI:** every push is built and tested on `windows-latest` by GitHub Actions. That run covers the tests, the PyInstaller build and the exe's own `--self-test`.
 - **Verification report:** [docs/VERIFICATION_REPORT.md](docs/VERIFICATION_REPORT.md) states exactly what was tested, where, and what was not.
 

@@ -101,6 +101,16 @@ class SettingsScreen(Screen):
                       "are for momentum only; they never change your skill scores.", "Muted"))
         self.body.addWidget(fun)
 
+        from ..app import SHORTCUTS
+        keys = Card("Keyboard shortcuts")
+        kg = QGridLayout()
+        for i, (k, d, _a) in enumerate(SHORTCUTS):
+            kg.addWidget(label(k, "Chip", wrap=False), i // 2, (i % 2) * 2)
+            kg.addWidget(label(d, wrap=False), i // 2, (i % 2) * 2 + 1)
+        kg.setColumnStretch(3, 1)
+        keys.add(kg)
+        self.body.addWidget(keys)
+
         data = Card("Your progress data")
         data.add(label(f"Progress database: {db.path}", "Muted"))
         data.add(label(f"Exports folder: {exports_dir()}", "Muted"))
@@ -214,3 +224,14 @@ class SettingsScreen(Screen):
                 error(self, "Export failed", str(exc))
                 return
             info(self, "Exported", f"Datasets written to {folder}" + (f" ({len(written)} files)" if written else ""))
+
+    def on_show(self, **kw):
+        """Pick up changes made elsewhere (for example the welcome card on Home)."""
+        db = self.ctx.db
+        for w, key, choices, default in (
+                (self.goal, "daily_goal", gamify.DAILY_GOAL_CHOICES, gamify.DEFAULT_DAILY_GOAL),
+                (self.focus, "focus_minutes", gamify.FOCUS_CHOICES, gamify.DEFAULT_FOCUS_MINUTES)):
+            w.blockSignals(True)
+            w.setCurrentIndex(choices.index(db.int_setting(key, choices, default)))
+            w.blockSignals(False)
+        self.name.setText(db.setting("student_name"))

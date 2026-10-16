@@ -266,6 +266,14 @@ class Progress:
         return int(self._q("SELECT COUNT(*) n FROM xp WHERE source=? AND substr(ts,1,10)=?",
                            [source, day.isoformat()])[0]["n"])
 
+    def xp_count(self, source: str) -> int:
+        return int(self._q("SELECT COUNT(*) n FROM xp WHERE source=?", [source])[0]["n"])
+
+    def xp_max_per_day(self, source: str) -> int:
+        r = self._q("SELECT COUNT(*) n FROM xp WHERE source=? GROUP BY substr(ts,1,10) ORDER BY n DESC LIMIT 1",
+                    [source])
+        return int(r[0]["n"]) if r else 0
+
     def active_days(self) -> list[dt.date]:
         return [dt.date.fromisoformat(r["d"]) for r in self._q("SELECT DISTINCT substr(ts,1,10) d FROM xp")]
 
@@ -320,5 +328,5 @@ class Progress:
         for t in ("attempts", "exercise_status", "quiz_answers", "quiz_results", "lesson_progress", "tasks",
                   "workbook_results", "capstone", "capstone_scores", "events", "xp"):
             self.conn.execute(f"DELETE FROM {t}")
-        self.conn.execute("DELETE FROM meta WHERE key IN ('last_lesson', 'xp_backfilled')")
+        self.conn.execute("DELETE FROM meta WHERE key IN ('last_lesson', 'xp_backfilled') OR key LIKE 'badge:%'")
         self.conn.commit()

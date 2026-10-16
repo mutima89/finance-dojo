@@ -61,7 +61,8 @@ QFrame#Sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }
 QLabel#Brand {{ font-size: {base_pt + 3}pt; font-weight: 700; color: {p.accent}; padding: 8px 6px 0px 6px; }}
 QLabel#BrandSub {{ color: {p.muted}; padding: 0px 6px 8px 26px; }}
 QListWidget#Nav {{ background: transparent; border: none; outline: 0; }}
-QListWidget#Nav::item {{ padding: 9px 10px; border-radius: 7px; margin: 1px 4px; color: {p.text2}; }}
+QListWidget#Nav::item {{ padding: 6px 10px; border-radius: 7px; margin: 0px 4px; color: {p.text2}; }}
+QListWidget#Nav::item:disabled {{ color: {p.muted}; background: transparent; padding: 8px 10px 2px 10px; }}
 QListWidget#Nav::item:hover {{ background: {p.surface2}; }}
 QListWidget#Nav::item:selected {{ background: {p.accent}; color: {p.accent_text}; }}
 QPushButton {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 7px; padding: 7px 14px; }}
@@ -148,6 +149,21 @@ QLabel#Chip {{ background: {p.surface2}; border: 1px solid {p.border}; border-ra
     color: {p.text2}; font-size: {base_pt - 1}pt; }}
 QLabel#BeltChip {{ border-radius: 10px; padding: 5px 10px; font-weight: 600; }}
 QLabel#StepLbl {{ color: {p.text2}; font-weight: 600; }}
+QPushButton#QuizOpt {{ text-align: left; padding: 10px 14px; border-radius: 9px; background: {p.surface2};
+    border: 1px solid {p.border}; color: {p.text}; }}
+QPushButton#QuizOpt:hover {{ border: 1px solid {p.accent}; }}
+QPushButton#QuizOpt:disabled {{ color: {p.text2}; }}
+QPushButton#QuizOpt[state="right"] {{ border: 2px solid {p.good}; color: {p.text}; font-weight: 600; }}
+QPushButton#QuizOpt[state="wrong"] {{ border: 2px solid {p.bad}; color: {p.text}; }}
+QLabel#QuizFeedback {{ color: {p.text2}; padding: 4px 0; }}
+QFrame#Manager {{ background: {p.surface}; border: 1px solid {p.border}; border-left: 4px solid {p.accent};
+    border-radius: 10px; }}
+QFrame#Welcome {{ background: {p.surface}; border: 2px solid {p.accent}; border-radius: 14px; }}
+QLabel#Avatar {{ background: {p.accent}; color: {p.accent_text}; border-radius: 22px; font-weight: 700;
+    font-size: {base_pt + 3}pt; }}
+QFrame#Badge {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 10px; }}
+QFrame#Badge[locked="true"] QLabel {{ color: {p.muted}; }}
+QFrame#Badge[locked="false"] {{ border: 2px solid {p.good}; }}
 """
 
 

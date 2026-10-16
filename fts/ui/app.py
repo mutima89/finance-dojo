@@ -11,14 +11,14 @@ from pathlib import Path
 from typing import Optional
 
 from PySide6.QtCore import QEvent, QObject, Qt, QTimer
-from PySide6.QtGui import QFont, QIcon
+from PySide6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel, QListWidget, QListWidgetItem,
                                QMainWindow, QMessageBox, QStackedWidget, QVBoxLayout, QWidget)
 
 from ..content import curriculum
 from ..paths import resource_root
 from ..content.base import SKILLS
-from ..core import gamify, mastery
+from ..core import achievements, gamify, mastery
 from ..storage.db import Progress
 from . import theme
 from .fun import Celebrator, XpPanel
@@ -42,6 +42,26 @@ SCREENS = {
     "reference": ("Reference & Interview Prep", "reference", "ReferenceScreen"),
     "settings": ("Settings & Backup", "settings", "SettingsScreen"),
 }
+
+# sidebar sections: (header, [(screen key, icon)])
+NAV_GROUPS = [
+    ("START", [("home", "🏠"), ("dojo", "🎲"), ("roadmap", "🗺")]),
+    ("LEARN", [("lessons", "📘"), ("capstone", "🏆"), ("reference", "💼")]),
+    ("PRACTISE", [("calculator", "🧮"), ("excel_center", "📊"), ("rm_simulator", "🏨"), ("fpa_lab", "📈"),
+                  ("scenario", "🔀"), ("business_case", "⚖")]),
+    ("YOU", [("progress", "🏅"), ("settings", "⚙")]),
+]
+
+# (keys, description, action name on MainWindow)
+SHORTCUTS = [
+    ("Ctrl+H", "Home", "go_home"),
+    ("Ctrl+D", "Daily Dojo (today's quests)", "go_dojo"),
+    ("Ctrl+L", "Continue your next lesson step", "go_next_step"),
+    ("Ctrl+Right", "Next step inside a lesson", "lesson_next"),
+    ("Ctrl+Left", "Previous step inside a lesson", "lesson_prev"),
+    ("Ctrl+T", "Start or stop the focus timer", "toggle_focus"),
+    ("F1", "Show these shortcuts", "show_shortcuts"),
+]
 
 
 class Ctx:
@@ -92,8 +112,21 @@ class Ctx:
         after = gamify.rank(db.xp_total())
         if after.index > before.index:
             self.celebrate(f"🥋 New belt: {after.belt.name}!", "You levelled up. " + gamify.BELT_NOTE, True)
+        self.check_badges()
         self.window.refresh_xp()
         return True
+
+    def check_badges(self, announce: bool = True) -> list:
+        """Store newly unlocked badges and (optionally) celebrate them. Badges give no XP."""
+        stats = achievements.collect_stats(self.db, [l for m in curriculum.modules() for l in m.lessons])
+        new = []
+        for b in achievements.unlocked(stats):
+            if not self.db.meta(f"badge:{b.id}"):
+                self.db.set_meta(f"badge:{b.id}", dt.date.today().isoformat())
+                new.append(b)
+                if announce:
+                    self.celebrate(f"{b.emoji} Badge unlocked: {b.name}", b.desc, True)
+        return new
 
     def celebrate(self, title: str, text: str = "", big: bool = False):
         self.window.fun.notify(title, text, big)
@@ -151,13 +184,24 @@ class MainWindow(QMainWindow):
         sl.addWidget(self.xp_panel)
         self.nav = QListWidget()
         self.nav.setObjectName("Nav")
-        for key, (title, *_rest) in SCREENS.items():
-            it = QListWidgetItem(title)
-            it.setData(Qt.UserRole, key)
-            self.nav.addItem(it)
+        self.nav_rows: dict[str, int] = {}
+        for header, items in NAV_GROUPS:
+            h = QListWidgetItem(header)
+            h.setFlags(Qt.NoItemFlags)
+            h.setData(Qt.UserRole, None)
+            f = h.font()
+            f.setPointSizeF(max(6.0, f.pointSizeF() - 2) if f.pointSizeF() > 0 else 8)
+            f.setBold(True)
+            h.setFont(f)
+            self.nav.addItem(h)
+            for key, icon in items:
+                it = QListWidgetItem(f"{icon}  {SCREENS[key][0]}")
+                it.setData(Qt.UserRole, key)
+                self.nav_rows[key] = self.nav.count()
+                self.nav.addItem(it)
         self.nav.currentItemChanged.connect(self._nav_changed)
         sl.addWidget(self.nav, 1)
-        foot = QLabel("Offline · fictional training data\nNot a professional certification")
+        foot = QLabel("Offline · fictional training data · not a certification · F1 shortcuts")
         foot.setObjectName("Muted")
         foot.setWordWrap(True)
         sl.addWidget(foot)
@@ -168,7 +212,10 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(f"Progress saved locally: {self.db.path}")
         self.fun = Celebrator(root, self.db)
         backfill_xp(self.db)
+        self.ctx.check_badges(announce=False)      # badges earned before this version, no fanfare
         self.xp_panel.refresh()
+        for keys, _desc, action in SHORTCUTS:
+            QShortcut(QKeySequence(keys), self, activated=getattr(self, action))
         self.apply_theme()
         self.navigate("home")
 
@@ -176,7 +223,7 @@ class MainWindow(QMainWindow):
     def _nav_changed(self, cur, _prev):
         if cur is not None:
             key = cur.data(Qt.UserRole)
-            if key != self.current:
+            if key and key != self.current:
                 self.navigate(key)
 
     def screen(self, key: str) -> QWidget:
@@ -201,13 +248,46 @@ class MainWindow(QMainWindow):
             return
         self.current = key
         self.stack.setCurrentWidget(w)
-        row = list(SCREENS).index(key)
+        row = self.nav_rows[key]
         if self.nav.currentRow() != row:
             self.nav.blockSignals(True)
             self.nav.setCurrentRow(row)
             self.nav.blockSignals(False)
         if hasattr(w, "on_show"):
             w.on_show(**kwargs)
+
+    # keyboard shortcuts -------------------------------------------------------
+    def go_home(self):
+        self.navigate("home")
+
+    def go_dojo(self):
+        self.navigate("dojo")
+
+    def go_next_step(self):
+        from .screens.home import next_step
+        lesson, step, _text = next_step(self.ctx)
+        if lesson is None:
+            self.navigate("capstone")
+        else:
+            self.navigate("lessons", lesson=lesson.id, step=step)
+
+    def _lesson_move(self, d: int):
+        w = self.screens.get(self.current)
+        if self.current == "lessons" and w is not None and w.lesson is not None:
+            w._move(d)
+
+    def lesson_next(self):
+        self._lesson_move(1)
+
+    def lesson_prev(self):
+        self._lesson_move(-1)
+
+    def toggle_focus(self):
+        self.xp_panel.toggle_focus()
+
+    def show_shortcuts(self):
+        QMessageBox.information(self, "Keyboard shortcuts",
+                                "\n".join(f"{k:<12} {d}" for k, d, _a in SHORTCUTS))
 
     # motivation --------------------------------------------------------------
     def refresh_xp(self):
@@ -310,6 +390,8 @@ def self_test(app: QApplication) -> int:
             "NPV(10%, -100, 60, 60) = 4.13": abs(m.npv(0.10, [-100, 60, 60]) - 4.1322) < 1e-3,
             "Answer-key workbook grades 16/16": sum(r.status == "correct" for r in wbk.grade_workbook(
                 resource_root() / "workbooks" / "ANSWER_KEY_Workbook_Aurelia_Grand.xlsx")) == 16,
+            "Badges: none unlocked on a fresh start": achievements.unlocked(achievements.collect_stats(
+                win.db, [l for mod in curriculum.modules() for l in mod.lessons])) == [],
         }
         for name, ok in checks.items():
             lines.append(f"{'OK  ' if ok else 'FAIL'} {name}")

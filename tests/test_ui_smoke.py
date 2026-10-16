@@ -15,6 +15,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("MPLBACKEND", "QtAgg")
 
 pytest.importorskip("PySide6")
+from PySide6.QtCore import Qt  # noqa: E402
 from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QPushButton  # noqa: E402
 
 
@@ -279,4 +280,132 @@ def test_startup_shutdown_persistence(tmp_path, monkeypatch):
     win2 = MainWindow()                           # second start reads the same data
     assert win2.db.exercise_state(lesson.guided.id)["solved"]
     assert win2.ctx.pal.name == "light"
+    win2.close()
+
+
+def test_sidebar_groups_fit_and_navigate(env):
+    from fts.ui.app import NAV_GROUPS, SCREENS
+    win = env["win"]
+    keys = [k for _h, items in NAV_GROUPS for k, _i in items]
+    assert sorted(keys) == sorted(SCREENS)                 # every screen exactly once
+    headers = [win.nav.item(r) for r in range(win.nav.count()) if win.nav.item(r).data(0x0100) is None]
+    assert len(headers) == len(NAV_GROUPS)
+    for h in headers:
+        assert not (h.flags() & Qt.ItemIsSelectable)
+    for key in ("dojo", "settings", "lessons"):
+        win.nav.setCurrentRow(win.nav_rows[key])
+        env["app"].processEvents()
+        assert win.current == key
+    win.navigate("home")
+    assert win.nav.currentItem().data(0x0100) == "home"
+    _no_errors(env)
+
+
+def test_keyboard_shortcuts(env):
+    from fts.ui.app import SHORTCUTS
+    win = env["win"]
+    for _k, _d, action in SHORTCUTS:
+        assert callable(getattr(win, action))
+    win.go_dojo()
+    assert win.current == "dojo"
+    win.go_next_step()
+    assert win.current in ("lessons", "capstone")
+    if win.current == "lessons":
+        lessons = win.screens["lessons"]
+        lessons.tabs.setCurrentIndex(0)
+        win.lesson_next()
+        assert lessons.tabs.currentIndex() == 1
+        win.lesson_prev()
+        assert lessons.tabs.currentIndex() == 0
+    win.toggle_focus()
+    assert win.xp_panel.focus_end is not None
+    win.toggle_focus()
+    assert win.xp_panel.focus_end is None
+    env["messages"].clear()
+    win.show_shortcuts()
+    assert env["messages"] and env["messages"][-1][1] == "Keyboard shortcuts"
+    win.go_home()
+    assert win.current == "home"
+    _no_errors(env)
+
+
+def test_one_question_at_a_time_quiz(env):
+    from fts.content import curriculum
+    from fts.ui.widgets import QuizWidget
+    win = env["win"]
+    mod = curriculum.modules()[1]
+    lesson = mod.lessons[1]
+    win.navigate("lessons", lesson=lesson.id, step=5)
+    quiz = [q for q in win.screens["lessons"].findChildren(QuizWidget) if q.lesson.id == lesson.id][-1]
+    quiz.retake()
+    before = win.db.best_quiz(lesson.id)
+    assert quiz.question.text().startswith("Question 1 of")
+    assert not quiz.btn_next.isEnabled()                    # must answer first
+    quiz.next_question()
+    assert quiz.i == 0
+    for k, q in enumerate(lesson.quiz):
+        wrong = (q.answer + 1) % len(q.options)
+        quiz.choose(wrong if k == 0 else q.answer)
+        quiz.choose(q.answer)                               # a second click is ignored
+        assert len(quiz.results) == k + 1
+        assert all(not b.isEnabled() for b in quiz.opts)
+        assert quiz.opts[q.answer].property("state") == "right"
+        quiz.next_question()
+    assert quiz.finished
+    n = len(lesson.quiz)
+    assert quiz.question.text().startswith(f"You scored {n - 1} out of {n}")
+    best = win.db.best_quiz(lesson.id)
+    assert best[0] >= n - 1 and (before is None or best[0] >= before[0])
+    assert quiz.btn_retake.isVisible() and not quiz.btn_next.isVisible()
+    quiz.retake()
+    assert quiz.i == 0 and quiz.results == [] and not quiz.finished
+    _no_errors(env)
+
+
+def test_badge_unlock_is_celebrated_once(env):
+    win = env["win"]
+    db = win.db
+    db._x("DELETE FROM meta WHERE key LIKE 'badge:%'")
+    win.fun.toast.queue.clear()
+    db.set_setting("celebrations", "1")
+    new = win.ctx.check_badges()
+    assert any(b.id == "first_steps" for b in new)
+    assert db.meta("badge:first_steps")
+    titles = [t for t, _x, _b in win.fun.toast.queue] + [win.fun.toast.title.text()]
+    assert any("Badge unlocked" in t for t in titles)
+    assert win.ctx.check_badges() == []                     # nothing twice
+    win.navigate("dojo")
+    dojo = win.screens["dojo"]
+    assert "unlocked" in dojo.badge_next.text()
+    f, _p = dojo.badge_frames["first_steps"]
+    assert f.property("locked") == "false"
+    _no_errors(env)
+
+
+def test_home_manager_note_and_welcome(tmp_path, monkeypatch):
+    from fts.content import story
+    from fts.ui.app import MainWindow
+    monkeypatch.setenv("FTS_DATA_DIR", str(tmp_path))
+    app = QApplication.instance() or QApplication([])
+    win = MainWindow()
+    win.show()
+    app.processEvents()
+    home = win.screens["home"]
+    assert home.welcome.isVisible()                         # brand-new user
+    assert story.MANAGER in home.mgr_from.text()
+    assert home.mgr_subject.text() == story.note_for(1)[0]
+    home.w_name.setText("Sam")
+    home.w_goal.setCurrentIndex(0)
+    home.w_focus.setCurrentIndex(0)
+    home.finish_welcome()
+    assert not home.welcome.isVisible()
+    assert win.db.setting("student_name") == "Sam"
+    assert win.db.setting("daily_goal") == "30"
+    assert win.db.setting("focus_minutes") == "5"
+    assert home.h1.text() == "Welcome back, Sam"
+    win.navigate("settings")
+    assert win.screens["settings"].goal.currentData() == 30
+    win.close()
+    win2 = MainWindow()                                      # welcome only once
+    assert not win2.screens["home"].welcome.isVisibleTo(win2.screens["home"])
     win2.close()

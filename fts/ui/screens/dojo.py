@@ -6,8 +6,8 @@ import datetime as dt
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QLineEdit, QProgressBar, QVBoxLayout
 
-from ...content import life
-from ...core import gamify
+from ...content import curriculum, life
+from ...core import achievements, gamify
 from ...core.checker import check_numeric, format_value
 from ..widgets import Card, Chart, button, label
 from .base import Screen
@@ -185,6 +185,30 @@ class DojoScreen(Screen):
         self.chart = Chart(ctx, 2.4)
         hist.add(self.chart)
         r2.addWidget(hist, 1)
+        badges = Card("Badges")
+        self.badge_next = label("", "Muted", rich=True)
+        badges.add(self.badge_next)
+        self.badge_grid = QGridLayout()
+        self.badge_grid.setSpacing(8)
+        badges.add(self.badge_grid)
+        badges.add(label(achievements.BADGE_NOTE, "Muted"))
+        self.body.addWidget(badges)
+        self.badge_frames = {}
+        for i, b in enumerate(achievements.BADGES):
+            f = QFrame()
+            f.setObjectName("Badge")
+            fl = QHBoxLayout(f)
+            fl.setContentsMargins(10, 8, 10, 8)
+            fl.addWidget(label(b.emoji, "Emoji", wrap=False))
+            tv = QVBoxLayout()
+            tv.setSpacing(0)
+            tv.addWidget(label(b.name, "H3", wrap=False))
+            prog = label(b.desc, "Muted")
+            tv.addWidget(prog)
+            fl.addLayout(tv, 1)
+            self.badge_frames[b.id] = (f, prog)
+            self.badge_grid.addWidget(f, i // 4, i % 4)
+
         how = Card("How to earn XP")
         how.add(label("• Exercise solved: 20 on the first try (15 with hints), 12 on the second, 8 later\n"
                       f"• Quiz: {gamify.QUIZ_XP_PER_CORRECT} per correct answer when you beat your best\n"
@@ -260,6 +284,7 @@ class DojoScreen(Screen):
         self.quests_card.lay.itemAt(0).widget().setText(
             "Today's quests" + (f" · {left} to go" if left else " · all done! 🎉"))
         self._fill_path(r)
+        self._fill_badges()
         by_day = db.xp_by_day(14)
         days = [today - dt.timedelta(days=i) for i in range(13, -1, -1)]
 
@@ -289,6 +314,28 @@ class DojoScreen(Screen):
                              f"{('#111' if dark_text else '#fff') if on else self.ctx.pal.muted};"
                              f"border:1px solid {b.color};")
             self.path_grid.addWidget(lb, i // 4, i % 4)
+
+    def _fill_badges(self):
+        db = self.ctx.db
+        stats = achievements.collect_stats(db, [l for m in curriculum.modules() for l in m.lessons])
+        got = {b.id for b in achievements.unlocked(stats)}
+        for b in achievements.BADGES:
+            f, prog = self.badge_frames[b.id]
+            on = b.id in got
+            f.setProperty("locked", "false" if on else "true")
+            f.style().unpolish(f)
+            f.style().polish(f)
+            have = min(stats.get(b.stat, 0), b.need)
+            counter = b.need > 1 and b.stat != "belt"
+            prog.setText(b.desc + ("  ✔" if on else f"  ({have}/{b.need})" if counter else ""))
+        nxt = achievements.next_badges(stats, 1)
+        head = f"<b>{len(got)} of {len(achievements.BADGES)}</b> unlocked"
+        if nxt:
+            b = nxt[0][0]
+            head += f" · closest next: {b.emoji} <b>{b.name}</b> ({b.desc[0].lower() + b.desc[1:-1]})"
+        else:
+            head += " · you collected them all! 🎉"
+        self.badge_next.setText(head)
 
     def on_theme(self):
         if self.day:

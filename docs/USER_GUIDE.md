@@ -61,8 +61,8 @@ python3.12 -m venv .venv
 
 | Screen | What you do there |
 |---|---|
-| **Home** | Your next 5-minute step (one button), belt, streak and today's goal, then overall progress, mastery by skill, "resume where I left off" and weak topics |
-| **Daily Dojo** | Three one-minute quests from everyday life each day (coffee cart break-even, gym cost per visit, grocery budget variance, a side-hustle NPV and more), endless quick-fire practice, your belt path and XP for the last 14 days |
+| **Home** | A one-time welcome (name, daily goal, focus length), your next 5-minute step (one button), belt, streak and today's goal, a note from your fictional manager about the current module, then overall progress, mastery by skill, "resume where I left off" and weak topics |
+| **Daily Dojo** | Three one-minute quests from everyday life each day (coffee cart break-even, gym cost per visit, grocery budget variance, a side-hustle NPV and more), endless quick-fire practice, your belt path, 16 badges and XP for the last 14 days |
 | **Training Roadmap** | The 8 modules, lesson status and the job-ready requirements |
 | **Module Lessons** | 16 lessons, each in 7 short steps (Learn, See it, Try with help, Try alone, Business view, Quiz, Task) with a "Next step" button. Every lesson opens with its key idea in one sentence and an everyday example |
 | **Financial Calculator** | Occupancy/ADR/RevPAR, variance, contribution & break-even, NPV/IRR/payback, time value of money, working capital. Each result shows its formula |
@@ -74,23 +74,29 @@ python3.12 -m venv .venv
 | **Capstone Project** | 8 steps on messy hotel data: clean, KPIs, forecast, variances, two decisions, dashboard, executive recommendation and a simulated management meeting. Scored out of 100 with a pass mark of 70 |
 | **Progress & Competency** | Skill levels, weak topics, quiz history, accuracy and active study time. Export as HTML or Excel |
 | **Reference & Interview Prep** | 54 glossary terms, 28 formulas, 18 common mistakes and 20 interview questions with answer outlines. All searchable |
-| **Settings & Backup** | Dark/light theme, attempts before the solution is shown (default 3), text size, student name, daily goal, focus timer length, celebrations on/off, reduce motion, backup/restore/reset, and instructor exports |
+| **Settings & Backup** | Keyboard shortcuts, dark/light theme, attempts before the solution is shown (default 3), text size, student name, daily goal, focus timer length, celebrations on/off, reduce motion, backup/restore/reset, and instructor exports |
 
 **Content in numbers:** 8 modules, 16 lessons, 58 auto-checked exercises (23 practical), 48 quiz questions, 16 practical tasks, 16 Excel workbook tasks and a 100-point capstone. Practice cases include the hotel, a retail business (Harbor Lane Outfitters) and small commercial projects such as a restaurant promotion, a spa expansion and a meeting-room conversion. All of them are fictional.
 
 ### Built to keep you going (ADHD-friendly by design)
 - **One next step.** Home shows a single "Start now" button that opens the exact lesson step to do next, so you never have to decide where to begin.
+- **A quick start.** The first time you open the app, a welcome card asks for your name, a daily goal and a focus length. Skip it if you like; everything can be changed in Settings.
+- **A tidy sidebar.** Screens are grouped into Start, Learn, Practise and You, so the list fits on a laptop screen without scrolling.
+- **A story to follow.** Home shows a short note from Sofia Reyes, the fictional General Manager of The Aurelia Grand, explaining why the module you're on matters to the hotel this week.
 - **Small chunks.** Each lesson is split into 7 steps of a few minutes, with "Step 3 of 7" and a "Next step" button.
 - **Real life first.** Each lesson starts with a one-sentence key idea and an everyday example. The Daily Dojo turns the same formulas into one-minute puzzles about coffee carts, gym fees, phone bills and side hustles. All scenarios and prices are made up for practice.
 - **Quick wins.** Correct answers earn XP straight away with a short pop-up. XP fills up belts from White to Black, and a big win (a new belt, a finished lesson, your daily goal) gets a burst of confetti.
 - **A kind streak.** Your streak counts the days you practise. It survives one rest day in a row, and XP and belts never go down.
 - **Focus timer.** Start a 5, 10, 15 or 25-minute focus block from the sidebar. When it ends you get XP and a reminder to take a short break.
 - **Your settings.** Pick a gentle (30 XP), steady (50 XP) or ambitious (100 XP) daily goal. Turn pop-ups off, or keep them and switch on *reduce motion* to drop the confetti and fades.
+- **One question at a time.** Quizzes show a single question with large answer buttons. You see straight away whether you were right, with the explanation, then move on. Dots at the top show how far you are. Only your best score counts, so you can retake a quiz whenever you like.
+- **Badges.** 16 badges (for example *Quiz ace*, *Quest sweep*, *On fire*, *Week warrior*) are shown in the Daily Dojo with a counter for how close you are. A new badge gets a pop-up. Badges give no XP.
+- **Keyboard shortcuts.** Ctrl+L continues your next step, Ctrl+Right / Ctrl+Left move between lesson steps, Ctrl+H goes Home, Ctrl+D opens the Daily Dojo, Ctrl+T starts or stops the focus timer and F1 lists them all.
 - **Encouraging feedback.** Wrong answers get a specific diagnosis plus a short, kind nudge to try again.
 
 **How XP is earned:** an exercise solved on the first try gives 20 XP (15 if you used hints), 12 on the second try and 8 later. A revealed solution gives 0. Quizzes give 5 XP per correct answer, but only when you beat your best score. A saved practical task gives 25 and a finished lesson 50. Daily quests give 15, quick-fire practice 5 (the first 10 a day), a finished focus block 10, and reaching your daily goal a 20 XP bonus. Progress made before XP existed is credited once, dated when it happened.
 
-**XP and belts are for fun and momentum only.** They never change your skill scores or levels below, and a belt is not a qualification.
+**XP, belts and badges are for fun and momentum only.** They never change your skill scores or levels below, and a belt is not a qualification.
 
 ### How answers are checked
 - **Number formats:** answers accept `75%`, `0.75` or `75`, plus `$1,234`, `1.2k`, `3.5m`, `(500)` for negatives, and units such as `3.9 years`.

@@ -159,3 +159,15 @@ CHEER_RIGHT = (
 
 def pick(options: tuple[str, ...], seed: int) -> str:
     return options[seed % len(options)]
+
+
+def best_streak(active_days: Iterable[dt.date]) -> int:
+    """Longest run of active days ever, with the same one-rest-day rule as streak()."""
+    days = sorted(set(active_days))
+    best = run = 0
+    prev = None
+    for d in days:
+        run = run + 1 if prev is not None and (d - prev).days <= 2 else 1
+        best = max(best, run)
+        prev = d
+    return best
