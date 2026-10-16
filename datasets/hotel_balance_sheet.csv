@@ -1,0 +1,10 @@
+line,category,31-Dec-2024,31-Dec-2025
+Cash,Asset,3200000.0,3979827.0
+Accounts receivable,Asset,1150000.0,899478.0
+Inventories,Asset,360000.0,395000.0
+"Property, plant & equipment (net)",Asset,62000000.0,60730000.0
+Accounts payable,Liability,940000.0,1010000.0
+Accrued expenses,Liability,610000.0,640000.0
+Bank loan,Liability,30000000.0,28500000.0
+Share capital,Equity,20000000.0,20000000.0
+Retained earnings,Equity,15160000.0,15854305.0

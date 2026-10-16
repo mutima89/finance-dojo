@@ -1,0 +1,325 @@
+month,month_name,line,line_type,actual,budget
+1,Jan,Rooms revenue,revenue,1188420.0,1172710.0
+1,Jan,Food & beverage revenue,revenue,415063.0,419110.0
+1,Jan,Spa & other revenue,revenue,106484.0,103564.0
+1,Jan,Total revenue,total,1709967.0,1695384.0
+1,Jan,Rooms payroll,expense,186146.0,179860.0
+1,Jan,Rooms other expenses,expense,157248.0,135288.0
+1,Jan,F&B cost of sales,expense,125349.0,125733.0
+1,Jan,F&B payroll,expense,189686.0,198360.0
+1,Jan,F&B other expenses,expense,33541.0,33529.0
+1,Jan,Spa & other expenses,expense,63917.0,66802.0
+1,Jan,Total departmental expenses,total,755887.0,739572.0
+1,Jan,Departmental profit,total,954080.0,955812.0
+1,Jan,Administrative & general,expense,162064.0,156120.0
+1,Jan,Sales & marketing,expense,133790.0,132451.0
+1,Jan,Property operations & maintenance,expense,84560.0,89720.0
+1,Jan,Utilities,expense,73716.0,72770.0
+1,Jan,Total undistributed expenses,total,454130.0,451061.0
+1,Jan,Gross operating profit (GOP),total,499950.0,504751.0
+1,Jan,Management fee,expense,51299.0,50862.0
+1,Jan,Insurance,expense,38000.0,38000.0
+1,Jan,Property tax,expense,52000.0,52000.0
+1,Jan,EBITDA,total,358651.0,363889.0
+1,Jan,Depreciation,expense,260000.0,260000.0
+1,Jan,Interest,expense,150000.0,150000.0
+1,Jan,Profit before tax,total,-51349.0,-46111.0
+1,Jan,Income tax,expense,-12837.0,-11528.0
+1,Jan,Net income,total,-38512.0,-34583.0
+2,Feb,Rooms revenue,revenue,1097098.0,1144248.0
+2,Feb,Food & beverage revenue,revenue,388493.0,401625.0
+2,Feb,Spa & other revenue,revenue,90500.0,99246.0
+2,Feb,Total revenue,total,1576091.0,1645119.0
+2,Feb,Rooms payroll,expense,185609.0,187660.0
+2,Feb,Rooms other expenses,expense,142347.0,131262.0
+2,Feb,F&B cost of sales,expense,117325.0,120488.0
+2,Feb,F&B payroll,expense,216045.0,205960.0
+2,Feb,F&B other expenses,expense,30668.0,32130.0
+2,Feb,Spa & other expenses,expense,71820.0,66024.0
+2,Feb,Total departmental expenses,total,763814.0,743524.0
+2,Feb,Departmental profit,total,812277.0,901595.0
+2,Feb,Administrative & general,expense,156460.0,156120.0
+2,Feb,Sales & marketing,expense,129337.0,131697.0
+2,Feb,Property operations & maintenance,expense,85114.0,89720.0
+2,Feb,Utilities,expense,79432.0,79610.0
+2,Feb,Total undistributed expenses,total,450343.0,457147.0
+2,Feb,Gross operating profit (GOP),total,361934.0,444448.0
+2,Feb,Management fee,expense,47283.0,49354.0
+2,Feb,Insurance,expense,38000.0,38000.0
+2,Feb,Property tax,expense,52000.0,52000.0
+2,Feb,EBITDA,total,224651.0,305094.0
+2,Feb,Depreciation,expense,260000.0,260000.0
+2,Feb,Interest,expense,149375.0,149375.0
+2,Feb,Profit before tax,total,-184724.0,-104281.0
+2,Feb,Income tax,expense,-46181.0,-26070.0
+2,Feb,Net income,total,-138543.0,-78211.0
+3,Mar,Rooms revenue,revenue,1418255.0,1446532.0
+3,Mar,Food & beverage revenue,revenue,479280.0,483045.0
+3,Mar,Spa & other revenue,revenue,114995.0,119374.0
+3,Mar,Total revenue,total,2012530.0,2048951.0
+3,Mar,Rooms payroll,expense,201454.0,195460.0
+3,Mar,Rooms other expenses,expense,182252.0,163430.0
+3,Mar,F&B cost of sales,expense,144743.0,144914.0
+3,Mar,F&B payroll,expense,222654.0,217360.0
+3,Mar,F&B other expenses,expense,38622.0,38644.0
+3,Mar,Spa & other expenses,expense,68714.0,73647.0
+3,Mar,Total departmental expenses,total,858439.0,833455.0
+3,Mar,Departmental profit,total,1154091.0,1215496.0
+3,Mar,Administrative & general,expense,161373.0,156120.0
+3,Mar,Sales & marketing,expense,144887.0,137754.0
+3,Mar,Property operations & maintenance,expense,93735.0,89720.0
+3,Mar,Utilities,expense,89057.0,89870.0
+3,Mar,Total undistributed expenses,total,489052.0,473464.0
+3,Mar,Gross operating profit (GOP),total,665039.0,742032.0
+3,Mar,Management fee,expense,60376.0,61469.0
+3,Mar,Insurance,expense,38000.0,38000.0
+3,Mar,Property tax,expense,52000.0,52000.0
+3,Mar,EBITDA,total,514663.0,590563.0
+3,Mar,Depreciation,expense,260000.0,260000.0
+3,Mar,Interest,expense,148750.0,148750.0
+3,Mar,Profit before tax,total,105913.0,181813.0
+3,Mar,Income tax,expense,26478.0,45453.0
+3,Mar,Net income,total,79435.0,136360.0
+4,Apr,Rooms revenue,revenue,1523272.0,1545696.0
+4,Apr,Food & beverage revenue,revenue,492833.0,492330.0
+4,Apr,Spa & other revenue,revenue,120591.0,121652.0
+4,Apr,Total revenue,total,2136696.0,2159678.0
+4,Apr,Rooms payroll,expense,194390.0,199360.0
+4,Apr,Rooms other expenses,expense,194078.0,172202.0
+4,Apr,F&B cost of sales,expense,148835.0,147699.0
+4,Apr,F&B payroll,expense,221995.0,221160.0
+4,Apr,F&B other expenses,expense,39017.0,39386.0
+4,Apr,Spa & other expenses,expense,74783.0,74057.0
+4,Apr,Total departmental expenses,total,873098.0,853864.0
+4,Apr,Departmental profit,total,1263598.0,1305814.0
+4,Apr,Administrative & general,expense,163036.0,156120.0
+4,Apr,Sales & marketing,expense,135462.0,139415.0
+4,Apr,Property operations & maintenance,expense,91107.0,89720.0
+4,Apr,Utilities,expense,94295.0,96710.0
+4,Apr,Total undistributed expenses,total,483900.0,481965.0
+4,Apr,Gross operating profit (GOP),total,779698.0,823849.0
+4,Apr,Management fee,expense,64101.0,64790.0
+4,Apr,Insurance,expense,38000.0,38000.0
+4,Apr,Property tax,expense,52000.0,52000.0
+4,Apr,EBITDA,total,625597.0,669059.0
+4,Apr,Depreciation,expense,260000.0,260000.0
+4,Apr,Interest,expense,148125.0,148125.0
+4,Apr,Profit before tax,total,217472.0,260934.0
+4,Apr,Income tax,expense,54368.0,65234.0
+4,Apr,Net income,total,163104.0,195700.0
+5,May,Rooms revenue,revenue,1713285.0,1710856.0
+5,May,Food & beverage revenue,revenue,527469.0,527800.0
+5,May,Spa & other revenue,revenue,128142.0,130424.0
+5,May,Total revenue,total,2368896.0,2369080.0
+5,May,Rooms payroll,expense,207581.0,207160.0
+5,May,Rooms other expenses,expense,219292.0,188862.0
+5,May,F&B cost of sales,expense,159295.0,158340.0
+5,May,F&B payroll,expense,237619.0,228760.0
+5,May,F&B other expenses,expense,42690.0,42224.0
+5,May,Spa & other expenses,expense,72144.0,75636.0
+5,May,Total departmental expenses,total,938621.0,900982.0
+5,May,Departmental profit,total,1430275.0,1468098.0
+5,May,Administrative & general,expense,150913.0,156120.0
+5,May,Sales & marketing,expense,151399.0,142556.0
+5,May,Property operations & maintenance,expense,96305.0,89720.0
+5,May,Utilities,expense,102413.0,101840.0
+5,May,Total undistributed expenses,total,501030.0,490236.0
+5,May,Gross operating profit (GOP),total,929245.0,977862.0
+5,May,Management fee,expense,71067.0,71072.0
+5,May,Insurance,expense,38000.0,38000.0
+5,May,Property tax,expense,52000.0,52000.0
+5,May,EBITDA,total,768178.0,816790.0
+5,May,Depreciation,expense,260000.0,260000.0
+5,May,Interest,expense,147500.0,147500.0
+5,May,Profit before tax,total,360678.0,409290.0
+5,May,Income tax,expense,90170.0,102322.0
+5,May,Net income,total,270508.0,306968.0
+6,Jun,Rooms revenue,revenue,1808875.0,1835108.0
+6,Jun,Food & beverage revenue,revenue,517430.0,541810.0
+6,Jun,Spa & other revenue,revenue,129633.0,133892.0
+6,Jun,Total revenue,total,2455938.0,2510810.0
+6,Jun,Rooms payroll,expense,216609.0,211060.0
+6,Jun,Rooms other expenses,expense,224100.0,200106.0
+6,Jun,F&B cost of sales,expense,156264.0,162543.0
+6,Jun,F&B payroll,expense,240910.0,236360.0
+6,Jun,F&B other expenses,expense,42025.0,43345.0
+6,Jun,Spa & other expenses,expense,76151.0,80261.0
+6,Jun,Total departmental expenses,total,956059.0,933675.0
+6,Jun,Departmental profit,total,1499879.0,1577135.0
+6,Jun,Administrative & general,expense,166052.0,156120.0
+6,Jun,Sales & marketing,expense,139739.0,144682.0
+6,Jun,Property operations & maintenance,expense,85349.0,89720.0
+6,Jun,Utilities,expense,124029.0,110390.0
+6,Jun,Total undistributed expenses,total,515169.0,500912.0
+6,Jun,Gross operating profit (GOP),total,984710.0,1076223.0
+6,Jun,Management fee,expense,73678.0,75324.0
+6,Jun,Insurance,expense,38000.0,38000.0
+6,Jun,Property tax,expense,52000.0,52000.0
+6,Jun,EBITDA,total,821032.0,910899.0
+6,Jun,Depreciation,expense,260000.0,260000.0
+6,Jun,Interest,expense,146875.0,146875.0
+6,Jun,Profit before tax,total,414157.0,504024.0
+6,Jun,Income tax,expense,103539.0,126006.0
+6,Jun,Net income,total,310618.0,378018.0
+7,Jul,Rooms revenue,revenue,2018175.0,2022732.0
+7,Jul,Food & beverage revenue,revenue,575756.0,572680.0
+7,Jul,Spa & other revenue,revenue,138407.0,141508.0
+7,Jul,Total revenue,total,2732338.0,2736920.0
+7,Jul,Rooms payroll,expense,218570.0,214960.0
+7,Jul,Rooms other expenses,expense,248218.0,218064.0
+7,Jul,F&B cost of sales,expense,173878.0,171804.0
+7,Jul,F&B payroll,expense,248176.0,240160.0
+7,Jul,F&B other expenses,expense,46058.0,45814.0
+7,Jul,Spa & other expenses,expense,77692.0,81631.0
+7,Jul,Total departmental expenses,total,1012592.0,972433.0
+7,Jul,Departmental profit,total,1719746.0,1764487.0
+7,Jul,Administrative & general,expense,160866.0,156120.0
+7,Jul,Sales & marketing,expense,141062.0,148074.0
+7,Jul,Property operations & maintenance,expense,212917.0,89720.0
+7,Jul,Utilities,expense,125509.0,113810.0
+7,Jul,Total undistributed expenses,total,640354.0,507724.0
+7,Jul,Gross operating profit (GOP),total,1079392.0,1256763.0
+7,Jul,Management fee,expense,81970.0,82108.0
+7,Jul,Insurance,expense,38000.0,38000.0
+7,Jul,Property tax,expense,52000.0,52000.0
+7,Jul,EBITDA,total,907422.0,1084655.0
+7,Jul,Depreciation,expense,260000.0,260000.0
+7,Jul,Interest,expense,146250.0,146250.0
+7,Jul,Profit before tax,total,501172.0,678405.0
+7,Jul,Income tax,expense,125293.0,169601.0
+7,Jul,Net income,total,375879.0,508804.0
+8,Aug,Rooms revenue,revenue,1929013.0,1926538.0
+8,Aug,Food & beverage revenue,revenue,548131.0,553360.0
+8,Aug,Spa & other revenue,revenue,136856.0,136748.0
+8,Aug,Total revenue,total,2614000.0,2616646.0
+8,Aug,Rooms payroll,expense,220310.0,211060.0
+8,Aug,Rooms other expenses,expense,240541.0,208505.0
+8,Aug,F&B cost of sales,expense,165536.0,166008.0
+8,Aug,F&B payroll,expense,232155.0,236360.0
+8,Aug,F&B other expenses,expense,43674.0,44269.0
+8,Aug,Spa & other expenses,expense,91406.0,80775.0
+8,Aug,Total departmental expenses,total,993622.0,946977.0
+8,Aug,Departmental profit,total,1620378.0,1669669.0
+8,Aug,Administrative & general,expense,152341.0,156120.0
+8,Aug,Sales & marketing,expense,156140.0,146270.0
+8,Aug,Property operations & maintenance,expense,87815.0,89720.0
+8,Aug,Utilities,expense,123911.0,108680.0
+8,Aug,Total undistributed expenses,total,520207.0,500790.0
+8,Aug,Gross operating profit (GOP),total,1100171.0,1168879.0
+8,Aug,Management fee,expense,78420.0,78499.0
+8,Aug,Insurance,expense,38000.0,38000.0
+8,Aug,Property tax,expense,52000.0,52000.0
+8,Aug,EBITDA,total,931751.0,1000380.0
+8,Aug,Depreciation,expense,260000.0,260000.0
+8,Aug,Interest,expense,145625.0,145625.0
+8,Aug,Profit before tax,total,526126.0,594755.0
+8,Aug,Income tax,expense,131532.0,148689.0
+8,Aug,Net income,total,394594.0,446066.0
+9,Sep,Rooms revenue,revenue,1541003.0,1698616.0
+9,Sep,Food & beverage revenue,revenue,480571.0,517070.0
+9,Sep,Spa & other revenue,revenue,120516.0,127772.0
+9,Sep,Total revenue,total,2142090.0,2343458.0
+9,Sep,Rooms payroll,expense,212553.0,207160.0
+9,Sep,Rooms other expenses,expense,208615.0,186803.0
+9,Sep,F&B cost of sales,expense,151380.0,155121.0
+9,Sep,F&B payroll,expense,233732.0,228760.0
+9,Sep,F&B other expenses,expense,37823.0,41366.0
+9,Sep,Spa & other expenses,expense,68312.0,75159.0
+9,Sep,Total departmental expenses,total,912415.0,894369.0
+9,Sep,Departmental profit,total,1229675.0,1449089.0
+9,Sep,Administrative & general,expense,158233.0,156120.0
+9,Sep,Sales & marketing,expense,141705.0,142172.0
+9,Sep,Property operations & maintenance,expense,90597.0,89720.0
+9,Sep,Utilities,expense,112868.0,103550.0
+9,Sep,Total undistributed expenses,total,503403.0,491562.0
+9,Sep,Gross operating profit (GOP),total,726272.0,957527.0
+9,Sep,Management fee,expense,64263.0,70304.0
+9,Sep,Insurance,expense,38000.0,38000.0
+9,Sep,Property tax,expense,52000.0,52000.0
+9,Sep,EBITDA,total,572009.0,797223.0
+9,Sep,Depreciation,expense,260000.0,260000.0
+9,Sep,Interest,expense,145000.0,145000.0
+9,Sep,Profit before tax,total,167009.0,392223.0
+9,Sep,Income tax,expense,41752.0,98056.0
+9,Sep,Net income,total,125257.0,294167.0
+10,Oct,Rooms revenue,revenue,1626713.0,1752334.0
+10,Oct,Food & beverage revenue,revenue,527721.0,540615.0
+10,Oct,Spa & other revenue,revenue,126684.0,133586.0
+10,Oct,Total revenue,total,2281118.0,2426535.0
+10,Oct,Rooms payroll,expense,212285.0,207160.0
+10,Oct,Rooms other expenses,expense,222283.0,193440.0
+10,Oct,F&B cost of sales,expense,166232.0,162184.0
+10,Oct,F&B payroll,expense,244041.0,232560.0
+10,Oct,F&B other expenses,expense,43228.0,43249.0
+10,Oct,Spa & other expenses,expense,77580.0,76205.0
+10,Oct,Total departmental expenses,total,965649.0,914798.0
+10,Oct,Departmental profit,total,1315469.0,1511737.0
+10,Oct,Administrative & general,expense,150952.0,156120.0
+10,Oct,Sales & marketing,expense,147672.0,143418.0
+10,Oct,Property operations & maintenance,expense,85849.0,89720.0
+10,Oct,Utilities,expense,117698.0,105260.0
+10,Oct,Total undistributed expenses,total,502171.0,494518.0
+10,Oct,Gross operating profit (GOP),total,813298.0,1017219.0
+10,Oct,Management fee,expense,68434.0,72796.0
+10,Oct,Insurance,expense,38000.0,38000.0
+10,Oct,Property tax,expense,52000.0,52000.0
+10,Oct,EBITDA,total,654864.0,854423.0
+10,Oct,Depreciation,expense,260000.0,260000.0
+10,Oct,Interest,expense,144375.0,144375.0
+10,Oct,Profit before tax,total,250489.0,450048.0
+10,Oct,Income tax,expense,62622.0,112512.0
+10,Oct,Net income,total,187867.0,337536.0
+11,Nov,Rooms revenue,revenue,1230940.0,1339740.0
+11,Nov,Food & beverage revenue,revenue,429125.0,455150.0
+11,Nov,Spa & other revenue,revenue,106471.0,112472.0
+11,Nov,Total revenue,total,1766536.0,1907362.0
+11,Nov,Rooms payroll,expense,189027.0,191560.0
+11,Nov,Rooms other expenses,expense,172342.0,152151.0
+11,Nov,F&B cost of sales,expense,135174.0,136545.0
+11,Nov,F&B payroll,expense,210825.0,213560.0
+11,Nov,F&B other expenses,expense,34465.0,36412.0
+11,Nov,Spa & other expenses,expense,69073.0,72405.0
+11,Nov,Total departmental expenses,total,810906.0,802633.0
+11,Nov,Departmental profit,total,955630.0,1104729.0
+11,Nov,Administrative & general,expense,149694.0,156120.0
+11,Nov,Sales & marketing,expense,141034.0,135630.0
+11,Nov,Property operations & maintenance,expense,96212.0,89720.0
+11,Nov,Utilities,expense,98427.0,86450.0
+11,Nov,Total undistributed expenses,total,485367.0,467920.0
+11,Nov,Gross operating profit (GOP),total,470263.0,636809.0
+11,Nov,Management fee,expense,52996.0,57221.0
+11,Nov,Insurance,expense,38000.0,38000.0
+11,Nov,Property tax,expense,52000.0,52000.0
+11,Nov,EBITDA,total,327267.0,489588.0
+11,Nov,Depreciation,expense,260000.0,260000.0
+11,Nov,Interest,expense,143750.0,143750.0
+11,Nov,Profit before tax,total,-76483.0,85838.0
+11,Nov,Income tax,expense,-19121.0,21460.0
+11,Nov,Net income,total,-57362.0,64378.0
+12,Dec,Rooms revenue,revenue,1349770.0,1511725.0
+12,Dec,Food & beverage revenue,revenue,440327.0,489425.0
+12,Dec,Spa & other revenue,revenue,113081.0,120938.0
+12,Dec,Total revenue,total,1903178.0,2122088.0
+12,Dec,Rooms payroll,expense,189308.0,195460.0
+12,Dec,Rooms other expenses,expense,186621.0,169224.0
+12,Dec,F&B cost of sales,expense,138703.0,146828.0
+12,Dec,F&B payroll,expense,228732.0,217360.0
+12,Dec,F&B other expenses,expense,35722.0,39154.0
+12,Dec,Spa & other expenses,expense,65311.0,73929.0
+12,Dec,Total departmental expenses,total,844397.0,841955.0
+12,Dec,Departmental profit,total,1058781.0,1280133.0
+12,Dec,Administrative & general,expense,158437.0,156120.0
+12,Dec,Sales & marketing,expense,130024.0,138851.0
+12,Dec,Property operations & maintenance,expense,90602.0,89720.0
+12,Dec,Utilities,expense,100884.0,91580.0
+12,Dec,Total undistributed expenses,total,479947.0,476271.0
+12,Dec,Gross operating profit (GOP),total,578834.0,803862.0
+12,Dec,Management fee,expense,57095.0,63663.0
+12,Dec,Insurance,expense,38000.0,38000.0
+12,Dec,Property tax,expense,52000.0,52000.0
+12,Dec,EBITDA,total,431739.0,650199.0
+12,Dec,Depreciation,expense,260000.0,260000.0
+12,Dec,Interest,expense,143125.0,143125.0
+12,Dec,Profit before tax,total,28614.0,247074.0
+12,Dec,Income tax,expense,7154.0,61768.0
+12,Dec,Net income,total,21460.0,185306.0
