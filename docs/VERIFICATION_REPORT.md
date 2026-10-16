@@ -12,6 +12,7 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 | Exe self-test (`--self-test`) | **PASS, 29/29 under Wine:** all 12 screens open in both themes, and the RevPAR, NPV and answer-key grading checks pass |
 | Exe started normally as a window | **Done under Wine on a virtual display.** The window rendered correctly in the dark theme and the progress database was created in the data folder |
 | **Real Windows (GitHub Actions `windows-latest`, Windows Server 2025, 10.0.26100)** | **Passed** ([run 1](https://github.com/mutima89/finance-dojo/actions/runs/38874275356)). Tests: **163 passed, 1 skipped** (LibreOffice is not installed there). The exe was built with PyInstaller on Windows and **its `--self-test` passed 29/29** using Qt's native Windows platform (not offscreen). Every push to `main` repeats this |
+| **Real Windows after the rename to Finance Dojo** | **Passed** ([run](https://github.com/mutima89/finance-dojo/actions/runs/38878216295)). Tests: **167 passed, 1 skipped**. `Finance_Dojo.exe` was built on Windows and **its `--self-test` passed 29/29** |
 | **Exe on a Windows 10/11 desktop PC** | Not yet confirmed by a person. Windows Server 2025 shares the Windows 11 code base, but run `--self-test` on your PC once to be sure |
 | All 12 screens open, in dark and light themes | **Verified headless** on Linux and with Windows Python under Wine |
 | Every enabled button on every screen clicked without an error | **Verified headless** (`tests/test_ui_smoke.py`) |
@@ -41,7 +42,7 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 | `test_ui_smoke.py` | 8 | Every screen opens; every button is clicked (file dialogs answered with temp paths); theme switch; an exercise flow (invalid → wrong → right, solved on attempt 2); the capstone scores 76/100 with all auto-scored items right and the written items blank; backup/restore through the Settings screen; corrupt backups rejected; startup → shutdown → restart keeps progress |
 
 ## Self-test built into the app
-`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: Windows exe under Wine `RESULT: PASS` (29/29 OK); Linux build `RESULT: PASS` (29/29 OK).
+`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (29/29 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
 
 ## Known limitations
 - **Windows:** the exe is built and self-tested on Windows Server 2025 by GitHub Actions, but no person has yet run it on a Windows 10/11 desktop. Fonts there will be Segoe UI, and spacing may differ slightly from the screenshots.
