@@ -6,7 +6,7 @@
 
 **A hands-on Windows desktop course for Revenue Management, FP&A and Commercial Finance. You learn by building, checking and explaining real analyses.**
 
-[![Windows build](https://github.com/mutima89/finance-commercial-training-simulator/actions/workflows/windows.yml/badge.svg)](https://github.com/mutima89/finance-commercial-training-simulator/actions/workflows/windows.yml)
+[![Windows build](https://github.com/mutima89/finance-dojo/actions/workflows/windows.yml/badge.svg)](https://github.com/mutima89/finance-dojo/actions/workflows/windows.yml)
 ![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)
 ![PySide6](https://img.shields.io/badge/UI-PySide6%20(Qt)-41CD52?logo=qt&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?logo=windows&logoColor=white)
@@ -61,7 +61,7 @@ The main case study is **The Aurelia Grand**, a fictional 150-room luxury hotel.
 
 ## Download and run (Windows 10/11)
 
-1. Open the **[Releases](https://github.com/mutima89/finance-commercial-training-simulator/releases)** page and download `Finance_Commercial_Training_Windows.zip`. Every build of `main` is also available under **[Actions](https://github.com/mutima89/finance-commercial-training-simulator/actions/workflows/windows.yml)** → latest run → *Artifacts*.
+1. Open the **[Releases](https://github.com/mutima89/finance-dojo/releases)** page and download `Finance_Commercial_Training_Windows.zip`. Every build of `main` is also available under **[Actions](https://github.com/mutima89/finance-dojo/actions/workflows/windows.yml)** → latest run → *Artifacts*.
 2. Unzip it anywhere, then double-click `Finance_Commercial_Training.exe`. Python is not needed.
 3. The exe is not code-signed, so Windows SmartScreen may warn the first time. Click *More info → Run anyway*.
 
