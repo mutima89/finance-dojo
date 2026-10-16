@@ -49,6 +49,8 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 - **Real-life quest data:** all scenarios and prices are invented for practice; they are not market data.
 - **Checked visually:** Home, Daily Dojo, a lesson step and Settings were inspected in both themes (offscreen on Linux), and the README screenshots were retaken.
 - **Self-test:** now 31 checks (14 screens x 2 themes + 3 calculations). Linux run: `RESULT: PASS` (31/31 OK).
+- **Real Windows ([GitHub Actions run](https://github.com/mutima89/finance-dojo/actions/runs/38881579791), Windows Server 2025):** tests **216 passed, 1 skipped** (LibreOffice is not installed there); `Finance_Dojo.exe` was built on Windows and its `--self-test` passed **31/31**, including the Daily Dojo screen in both themes.
+- **Not yet done:** a person using the new features on a Windows 10/11 desktop. Colour emoji depend on the system font (Segoe UI Emoji on Windows); in the Linux screenshots they render in one colour.
 
 ## Self-test built into the app
 `Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (29/29 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
