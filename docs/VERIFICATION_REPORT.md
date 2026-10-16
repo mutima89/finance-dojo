@@ -59,10 +59,11 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 - **What did not change:** finance calculations, the answer checker, how quiz results are stored, mastery rules and job-ready requirements. Badges are worked out from saved progress and give no XP.
 - **Checked visually:** Home (with and without the welcome), a quiz after a right and a wrong answer, and the Dojo badges, at 1366x768 in the dark theme, plus the README screenshots.
 - **Self-test:** now 32 checks (14 screens x 2 themes + 3 calculations + a badge check). Linux run: `RESULT: PASS`.
-- **Real Windows:** pending the GitHub Actions run for this change.
+- **Real Windows ([GitHub Actions run](https://github.com/mutima89/finance-dojo/actions/runs/38892622473), Windows Server 2025):** tests **233 passed, 1 skipped** (LibreOffice is not installed there); `Finance_Dojo.exe` was built on Windows and its `--self-test` passed **32/32**.
+- **Not yet done:** a person trying the welcome, quiz, badges and shortcuts on a Windows 10/11 desktop.
 
 ## Self-test built into the app
-`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (29/29 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
+`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (32/32 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
 
 ## Known limitations
 - **Windows:** the exe is built and self-tested on Windows Server 2025 by GitHub Actions, but no person has yet run it on a Windows 10/11 desktop. Fonts there will be Segoe UI, and spacing may differ slightly from the screenshots.
