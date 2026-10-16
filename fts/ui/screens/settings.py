@@ -96,7 +96,7 @@ class SettingsScreen(Screen):
         self.body.addWidget(inst)
 
         about = Card("About")
-        about.add(label("Finance & Commercial Training Simulator. Works offline. All companies, hotels and figures "
+        about.add(label("Finance Dojo. Works offline. All companies, hotels and figures "
                         "are fictional training data, not industry benchmarks. Forecasts and valuations in the app "
                         "are illustrative estimates, never guarantees. " + export.DISCLAIMER_CERT))
         self.body.addWidget(about)

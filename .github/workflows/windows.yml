@@ -32,26 +32,26 @@ jobs:
         run: python -m pytest -q
 
       - name: Build exe with PyInstaller
-        run: python -m PyInstaller --noconfirm --clean Finance_Commercial_Training.spec
+        run: python -m PyInstaller --noconfirm --clean Finance_Dojo.spec
 
       - name: Self-test the built exe
         shell: pwsh
         run: |
           $report = Join-Path $PWD "dist\self_test_report.txt"
           $env:FTS_SELFTEST_REPORT = $report
-          $p = Start-Process -FilePath "dist\Finance_Commercial_Training\Finance_Commercial_Training.exe" -ArgumentList "--self-test" -PassThru -Wait
+          $p = Start-Process -FilePath "dist\Finance_Dojo\Finance_Dojo.exe" -ArgumentList "--self-test" -PassThru -Wait
           if (Test-Path $report) { Get-Content $report }
           if ($p.ExitCode -ne 0) { throw "Self-test failed (exit code $($p.ExitCode))" }
 
       - name: Zip the app
         shell: pwsh
-        run: Compress-Archive -Path dist\Finance_Commercial_Training -DestinationPath dist\Finance_Commercial_Training_Windows.zip
+        run: Compress-Archive -Path dist\Finance_Dojo -DestinationPath dist\Finance_Dojo_Windows.zip
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Finance_Commercial_Training_Windows
+          name: Finance_Dojo_Windows
           path: |
-            dist/Finance_Commercial_Training_Windows.zip
+            dist/Finance_Dojo_Windows.zip
             dist/self_test_report.txt
 
       - name: Attach to release (version tags only)
@@ -59,5 +59,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/Finance_Commercial_Training_Windows.zip
+            dist/Finance_Dojo_Windows.zip
             dist/self_test_report.txt

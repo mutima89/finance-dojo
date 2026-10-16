@@ -21,7 +21,7 @@ from ..core import mastery
 from ..storage.db import Progress
 from . import theme
 
-APP_TITLE = "Finance & Commercial Training Simulator"
+APP_TITLE = "Finance Dojo"
 
 # key: (navigation title, module path, class name)
 SCREENS = {
@@ -114,9 +114,12 @@ class MainWindow(QMainWindow):
         side.setFixedWidth(258)
         sl = QVBoxLayout(side)
         sl.setContentsMargins(8, 12, 8, 12)
-        brand = QLabel("◆ Finance & Commercial\n   Training Simulator")
+        brand = QLabel("◆ Finance Dojo")
         brand.setObjectName("Brand")
         sl.addWidget(brand)
+        tagline = QLabel("Finance & commercial training")
+        tagline.setObjectName("BrandSub")
+        sl.addWidget(tagline)
         self.nav = QListWidget()
         self.nav.setObjectName("Nav")
         for key, (title, *_rest) in SCREENS.items():
@@ -247,7 +250,7 @@ def self_test(app: QApplication) -> int:
 def run(argv=None) -> int:
     argv = argv if argv is not None else sys.argv
     app = QApplication.instance() or QApplication(argv)
-    app.setApplicationName("Finance_Commercial_Training")
+    app.setApplicationName("Finance_Dojo")
     app.setStyle("Fusion")          # same look on every Windows version; the stylesheet themes it
     if "--self-test" in argv:
         return self_test(app)

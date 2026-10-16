@@ -1,18 +1,18 @@
-# User guide: Finance & Commercial Training Simulator
+# User guide: Finance Dojo
 
 A hands-on Windows desktop course in financial and commercial analysis for beginners. It covers financial foundations, Excel modelling, hotel revenue management, FP&A and budgeting, forecasting, commercial decisions, NPV/IRR, management reporting and a capstone project.
 
 The app works fully offline. Every company, hotel and number in it is **fictional training data**. It is not an industry benchmark. Forecasts and valuations in the app are illustrative estimates and never guarantees. **Completing this simulator is not a professional certification and does not guarantee employment.**
 
-> The ready-made Windows app is published as a zip on the repository's **Releases** page, and each build of the main branch is also available from the **Actions** tab (artifact `Finance_Commercial_Training_Windows`). See [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) for exactly what was tested and where.
+> The ready-made Windows app is published as a zip on the repository's **Releases** page, and each build of the main branch is also available from the **Actions** tab (artifact `Finance_Dojo_Windows`). See [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) for exactly what was tested and where.
 
 ---
 
 ## 1. Use the ready-made exe
 
-1. Download `Finance_Commercial_Training_Windows.zip` from the Releases page and unzip it, for example to `C:\FinanceTraining`.
-2. Double-click `Finance_Commercial_Training\Finance_Commercial_Training.exe`. Windows SmartScreen may warn because the exe is not code-signed. Click *More info → Run anyway*.
-3. Optional check: in that folder, type `cmd` in the address bar, then run `Finance_Commercial_Training.exe --self-test`. Then open `%APPDATA%\Finance_Commercial_Training\self_test_report.txt`; the last line should say `RESULT: PASS`.
+1. Download `Finance_Dojo_Windows.zip` from the Releases page and unzip it, for example to `C:\FinanceTraining`.
+2. Double-click `Finance_Dojo\Finance_Dojo.exe`. Windows SmartScreen may warn because the exe is not code-signed. Click *More info → Run anyway*.
+3. Optional check: in that folder, type `cmd` in the address bar, then run `Finance_Dojo.exe --self-test`. Then open `%APPDATA%\Finance_Dojo\self_test_report.txt`; the last line should say `RESULT: PASS`.
 
 ## 1b. Build the .exe yourself on Windows (about 10 minutes, one time)
 
@@ -28,12 +28,12 @@ The app works fully offline. Every company, hotel and number in it is **fictiona
 4. When it prints **BUILD SUCCEEDED**, the app is here:
 
    ```
-   dist\Finance_Commercial_Training\Finance_Commercial_Training.exe
+   dist\Finance_Dojo\Finance_Dojo.exe
    ```
 
-   A zip of that folder is at `dist\Finance_Commercial_Training_Windows.zip`. Copy the zip to any Windows 10/11 PC, unzip it and double-click the exe. That PC does not need Python.
+   A zip of that folder is at `dist\Finance_Dojo_Windows.zip`. Copy the zip to any Windows 10/11 PC, unzip it and double-click the exe. That PC does not need Python.
 
-**Single-file exe instead of a folder:** run `build_windows.bat -OneFile`. The result is `dist\Finance_Commercial_Training.exe`. One file is easier to share, but it starts more slowly because it unpacks itself each time.
+**Single-file exe instead of a folder:** run `build_windows.bat -OneFile`. The result is `dist\Finance_Dojo.exe`. One file is easier to share, but it starts more slowly because it unpacks itself each time.
 
 **Manual equivalent** (PowerShell, in this folder):
 
@@ -42,8 +42,8 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .\.venv\Scripts\python.exe scripts\generate_assets.py
 .\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean Finance_Commercial_Training.spec
-.\dist\Finance_Commercial_Training\Finance_Commercial_Training.exe --self-test
+.\.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean Finance_Dojo.spec
+.\dist\Finance_Dojo\Finance_Dojo.exe --self-test
 ```
 
 Problems? See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
@@ -54,7 +54,7 @@ Problems? See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt     # Windows: .venv\Scripts\pip
 .venv/bin/python main.py
-.venv/bin/python -m pytest -q                     # 164 tests
+.venv/bin/python -m pytest -q                     # 168 tests
 ```
 
 ## 3. What is inside the app
@@ -106,8 +106,8 @@ The app **creates and reads `.xlsx` files**. It does **not** open, control or ed
 - **XLOOKUP:** it is accepted, but needs Excel 2021 or Microsoft 365. Older versions can use INDEX/MATCH, which is the model answer.
 
 ## 4. Where things are stored
-- **Progress:** `%APPDATA%\Finance_Commercial_Training\progress.sqlite3` on Windows. Use Settings → Back up progress to copy it.
-- **Exports:** by default `%APPDATA%\Finance_Commercial_Training\exports\`. Settings has buttons that open both folders.
+- **Progress:** `%APPDATA%\Finance_Dojo\progress.sqlite3` on Windows. Use Settings → Back up progress to copy it.
+- **Exports:** by default `%APPDATA%\Finance_Dojo\exports\`. Settings has buttons that open both folders.
 - **Restore:** restoring checks that the file is a valid backup and keeps a safety copy of your current progress first.
 
 ## 5. Project layout
@@ -126,12 +126,12 @@ workbooks/                      practice workbook + instructor answer-key workbo
 docs/ANSWER_KEY.md              instructor answer key for every exercise, quiz, workbook task and capstone item
 docs/TROUBLESHOOTING.md         build and runtime problems
 docs/VERIFICATION_REPORT.md     what was tested, how, and what was not
-tests/                          164 automated tests (pytest)
+tests/                          168 automated tests (pytest)
 scripts/generate_assets.py      regenerate datasets, workbooks and the answer key
 scripts/make_icon.py            draws assets/app.ico
 scripts/build_exe_with_wine.sh  builds the Windows exe on Linux with Wine
 .github/workflows/windows.yml   CI: tests, exe build and exe self-test on Windows
-Finance_Commercial_Training.spec PyInstaller build definition
+Finance_Dojo.spec PyInstaller build definition
 build_windows.bat / .ps1        reproducible Windows build
 requirements.txt                pinned runtime packages (requirements-dev.txt adds pytest + PyInstaller)
 ```

@@ -1,6 +1,6 @@
 # Instructor answer key
 
-Finance & Commercial Training Simulator. All data is fictional. Answers are generated from the same code the app uses to check students, and selected values are verified by independent hand calculations in the automated tests (`tests/test_content.py`).
+Finance Dojo. All data is fictional. Answers are generated from the same code the app uses to check students, and selected values are verified by independent hand calculations in the automated tests (`tests/test_content.py`).
 
 Tolerance: percentages ±0.06 percentage points; currency ±$0.60 or 0.05%; numbers ±0.01 or 0.05% unless noted. Equivalent formats (75%, 0.75, 75) are accepted.
 

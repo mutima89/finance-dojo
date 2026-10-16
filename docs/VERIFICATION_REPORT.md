@@ -6,9 +6,9 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 
 | Item | Status |
 |---|---|
-| Automated test suite, Linux Python | **164 passed, 0 failed, 0 skipped** (`pytest -q`, with `QT_QPA_PLATFORM=offscreen` for the UI tests) |
-| Automated test suite, **Windows Python 3.12.10 under Wine** | **163 passed, 1 skipped.** The skipped test is the LibreOffice recalculation check, because LibreOffice is not installed on the Windows side. The UI tests ran with the Windows build of Qt |
-| **Windows `Finance_Commercial_Training.exe`** | **Built** with PyInstaller 6.11.1 running on Windows Python under Wine (`scripts/build_exe_with_wine.sh`). The result is a 64-bit Windows GUI executable (PE32+, x86-64), one-folder build, 190 MB unzipped and 83 MB zipped |
+| Automated test suite, Linux Python | **168 passed, 0 failed, 0 skipped** (after the rename to Finance Dojo) (`pytest -q`, with `QT_QPA_PLATFORM=offscreen` for the UI tests) |
+| Automated test suite, **Windows Python 3.12.10 under Wine** | **163 passed, 1 skipped** (164-test version, before the rename). The skipped test is the LibreOffice recalculation check, because LibreOffice is not installed on the Windows side. The UI tests ran with the Windows build of Qt |
+| **Windows exe under Wine** (then named `Finance_Commercial_Training.exe`) | **Built** with PyInstaller 6.11.1 running on Windows Python under Wine (`scripts/build_exe_with_wine.sh`). The result is a 64-bit Windows GUI executable (PE32+, x86-64), one-folder build, 190 MB unzipped and 83 MB zipped |
 | Exe self-test (`--self-test`) | **PASS, 29/29 under Wine:** all 12 screens open in both themes, and the RevPAR, NPV and answer-key grading checks pass |
 | Exe started normally as a window | **Done under Wine on a virtual display.** The window rendered correctly in the dark theme and the progress database was created in the data folder |
 | **Real Windows (GitHub Actions `windows-latest`, Windows Server 2025, 10.0.26100)** | **Passed** ([run 1](https://github.com/mutima89/finance-dojo/actions/runs/38874275356)). Tests: **163 passed, 1 skipped** (LibreOffice is not installed there). The exe was built with PyInstaller on Windows and **its `--self-test` passed 29/29** using Qt's native Windows platform (not offscreen). Every push to `main` repeats this |
@@ -37,13 +37,14 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 | `test_content.py` | 26 | 8 modules with all lesson parts; each expected answer is accepted when typed exactly as displayed; every skill is taught; selected answers recomputed independently by hand; the capstone totals 100 points and scores correctly; irrelevant KPIs are penalised; the cleaning answers are right |
 | `test_storage_mastery.py` | 10 | Progress persists across restarts; quiz and time logging; settings bounds; backup → reset → restore; exercise credit rules; **job-ready is impossible without the capstone, with quiz scores alone, or after revealing a practical solution**; weak-topic detection; hints fading |
 | `test_assets.py` | 16 | Every CSV in `datasets/`, `commercial_cases.json` and `docs/ANSWER_KEY.md` is byte-for-byte what the code generates; the bundled answer-key workbook grades 16/16 and the practice workbook grades as not attempted. |
+| `test_paths.py` | 4 | The data folder is `%APPDATA%\Finance_Dojo`; progress in the pre-rename folder (`%APPDATA%\Finance_Commercial_Training`) is copied over on first start and the original is kept; an existing new folder is never overwritten |
 | `test_ui_smoke.py` | 8 | Every screen opens; every button is clicked (file dialogs answered with temp paths); theme switch; an exercise flow (invalid → wrong → right, solved on attempt 2); the capstone scores 76/100 with all auto-scored items right and the written items blank; backup/restore through the Settings screen; corrupt backups rejected; startup → shutdown → restart keeps progress |
 
 ## Self-test built into the app
-`Finance_Commercial_Training.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: Windows exe under Wine `RESULT: PASS` (29/29 OK); Linux build `RESULT: PASS` (29/29 OK).
+`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: Windows exe under Wine `RESULT: PASS` (29/29 OK); Linux build `RESULT: PASS` (29/29 OK).
 
 ## Known limitations
-- **Windows:** the exe was built and run under Wine, not on real Windows. Fonts on Windows will be Segoe UI, and spacing may differ slightly.
+- **Windows:** the exe is built and self-tested on Windows Server 2025 by GitHub Actions, but no person has yet run it on a Windows 10/11 desktop. Fonts there will be Segoe UI, and spacing may differ slightly from the screenshots.
 - **Excel:** the app does not control Microsoft Excel. It creates and grades `.xlsx` files with its own formula engine, which covers the functions the course uses, not all of Excel.
 - **Written answers:** capstone written answers and saved practical tasks get a structure check or checklist, not an assessment of quality. That needs an instructor.
 - **Time tracking:** active study time is an approximation (15-second ticks while the lesson screen is visible, the window is active and there was input in the last 5 minutes).

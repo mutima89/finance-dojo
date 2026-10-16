@@ -18,7 +18,7 @@
 | Symptom | Fix |
 |---|---|
 | Windows SmartScreen: "Windows protected your PC" | The exe is not code-signed. Click *More info → Run anyway*. Only do this for a copy you built yourself or received from a trusted person. |
-| Nothing happens when you start the app | Run it once from a terminal: `Finance_Commercial_Training.exe --self-test`. Then read `%APPDATA%\Finance_Commercial_Training\self_test_report.txt`. |
+| Nothing happens when you start the app | Run it once from a terminal: `Finance_Dojo.exe --self-test`. Then read `%APPDATA%\Finance_Dojo\self_test_report.txt`. |
 | Blank or black window on an old PC or a remote desktop | Graphics driver issue with Qt. Try: `set QT_OPENGL=software` then start the exe from the same terminal. |
 | Text too small or too large | Settings → Text size. |
 | Charts look wrong after changing theme | Switch screen and back. If they stay wrong, restart the app; progress is saved continuously. |
@@ -30,4 +30,4 @@
 | Excel says the file is "Protected View" | Click *Enable Editing*. The workbook contains no macros. |
 
 ## Resetting completely
-Close the app and delete `%APPDATA%\Finance_Commercial_Training`. **This permanently deletes all progress**, so back it up first if you might want it.
+Close the app and delete `%APPDATA%\Finance_Dojo`. **This permanently deletes all progress**, so back it up first if you might want it.

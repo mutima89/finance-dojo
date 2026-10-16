@@ -1,11 +1,11 @@
-# PyInstaller spec for Finance_Commercial_Training.exe
-#   pyinstaller --noconfirm --clean Finance_Commercial_Training.spec
-# Default: one-folder build  -> dist/Finance_Commercial_Training/Finance_Commercial_Training.exe
-# Set FTS_ONEFILE=1 for a single exe -> dist/Finance_Commercial_Training.exe (slower to start)
+# PyInstaller spec for Finance_Dojo.exe
+#   pyinstaller --noconfirm --clean Finance_Dojo.spec
+# Default: one-folder build  -> dist/Finance_Dojo/Finance_Dojo.exe
+# Set FTS_ONEFILE=1 for a single exe -> dist/Finance_Dojo.exe (slower to start)
 import os
 
 ONEFILE = os.environ.get("FTS_ONEFILE") == "1"
-NAME = "Finance_Commercial_Training"
+NAME = "Finance_Dojo"
 
 datas = [
     ("datasets", "datasets"),

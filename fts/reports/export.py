@@ -159,7 +159,7 @@ h1{{color:#1f3a5f}} table.t{{border-collapse:collapse;width:100%;font-size:13px;
 .t th{{background:#1f3a5f;color:#fff;padding:6px;text-align:left}} .t td{{border-bottom:1px solid #e3e7ed;padding:5px}}
 .note{{background:#fff7e0;border:1px solid #f0d58a;padding:10px;border-radius:6px}}</style></head><body>
 <h1>Final competency report: {html.escape(name)}</h1>
-<p>Generated {dt.datetime.now():%d %b %Y %H:%M} · Finance &amp; Commercial Training Simulator</p>
+<p>Generated {dt.datetime.now():%d %b %Y %H:%M} · Finance Dojo</p>
 <p><b>Exercise attempts:</b> {n_att} ({n_ok} correct) · <b>Capstone:</b> {cap}</p>
 <p class="note">{DISCLAIMER_CERT} Levels: Beginner &lt; 40 ≤ Developing &lt; 70 ≤ Competent. "Job-ready for supervised
 tasks" also requires a score of 85+, all practical exercises solved without revealing the solution, all practical
@@ -176,7 +176,7 @@ def progress_report_xlsx(ctx_db, skills, path) -> Path:
 
 def answer_key_markdown() -> str:
     out = ["# Instructor answer key", "",
-           "Finance & Commercial Training Simulator. All data is fictional. Answers are generated from the same "
+           "Finance Dojo. All data is fictional. Answers are generated from the same "
            "code the app uses to check students, and selected values are verified by independent hand calculations "
            "in the automated tests (`tests/test_content.py`).", "",
            "Tolerance: percentages ±0.06 percentage points; currency ±$0.60 or 0.05%; numbers ±0.01 or 0.05% unless "

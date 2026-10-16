@@ -29,12 +29,12 @@ wine64 "$PY" -m pip install -q --no-warn-script-location -r requirements-dev.txt
 echo "== Running tests with Windows Python"
 QT_QPA_PLATFORM=offscreen wine64 "$PY" -m pytest -q -p no:cacheprovider 2>&1 | cat
 echo "== Building"
-wine64 "$PY" -m PyInstaller --noconfirm --clean Finance_Commercial_Training.spec 2>&1 | cat > build_wine.log
-EXE=dist/Finance_Commercial_Training/Finance_Commercial_Training.exe
+wine64 "$PY" -m PyInstaller --noconfirm --clean Finance_Dojo.spec 2>&1 | cat > build_wine.log
+EXE=dist/Finance_Dojo/Finance_Dojo.exe
 test -f "$EXE" || { echo "build failed, see build_wine.log"; exit 1; }
 echo "== Self-test of the exe"
 QT_QPA_PLATFORM=offscreen FTS_SELFTEST_REPORT='Z:\tmp\fts_self_test_report.txt' wine64 "$EXE" --self-test 2>&1 | cat
 cp /tmp/fts_self_test_report.txt dist/self_test_report.txt
 tail -1 dist/self_test_report.txt
-(cd dist && rm -f Finance_Commercial_Training_Windows.zip && python3 -m zipfile -c Finance_Commercial_Training_Windows.zip Finance_Commercial_Training)
-echo "Built: $ROOT/$EXE and dist/Finance_Commercial_Training_Windows.zip"
+(cd dist && rm -f Finance_Dojo_Windows.zip && python3 -m zipfile -c Finance_Dojo_Windows.zip Finance_Dojo)
+echo "Built: $ROOT/$EXE and dist/Finance_Dojo_Windows.zip"

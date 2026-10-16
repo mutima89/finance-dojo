@@ -58,7 +58,8 @@ QLabel#Bad {{ color: {p.bad}; font-weight: 600; }}
 QLabel#Warn {{ color: {p.warn}; font-weight: 600; }}
 QFrame#Card {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 10px; }}
 QFrame#Sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
-QLabel#Brand {{ font-size: {base_pt + 3}pt; font-weight: 700; color: {p.accent}; padding: 8px 6px; }}
+QLabel#Brand {{ font-size: {base_pt + 3}pt; font-weight: 700; color: {p.accent}; padding: 8px 6px 0px 6px; }}
+QLabel#BrandSub {{ color: {p.muted}; padding: 0px 6px 8px 26px; }}
 QListWidget#Nav {{ background: transparent; border: none; outline: 0; }}
 QListWidget#Nav::item {{ padding: 9px 10px; border-radius: 7px; margin: 1px 4px; color: {p.text2}; }}
 QListWidget#Nav::item:hover {{ background: {p.surface2}; }}

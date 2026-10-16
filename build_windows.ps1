@@ -1,4 +1,4 @@
-# Build Finance_Commercial_Training.exe on Windows 10/11 (PowerShell).
+# Build Finance_Dojo.exe on Windows 10/11 (PowerShell).
 #   powershell -ExecutionPolicy Bypass -File build_windows.ps1            # one-folder build (recommended)
 #   powershell -ExecutionPolicy Bypass -File build_windows.ps1 -OneFile   # single .exe
 # Requires Python 3.12 (64-bit) from python.org with "Add python.exe to PATH" or the "py" launcher.
@@ -39,11 +39,11 @@ if (-not $SkipTests) {
 
 Step "Building with PyInstaller"
 if ($OneFile) { $env:FTS_ONEFILE = "1" } else { Remove-Item Env:\FTS_ONEFILE -ErrorAction SilentlyContinue }
-& $vpy -m PyInstaller --noconfirm --clean Finance_Commercial_Training.spec
+& $vpy -m PyInstaller --noconfirm --clean Finance_Dojo.spec
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed." }
 
-if ($OneFile) { $exe = "dist\Finance_Commercial_Training.exe" }
-else { $exe = "dist\Finance_Commercial_Training\Finance_Commercial_Training.exe" }
+if ($OneFile) { $exe = "dist\Finance_Dojo.exe" }
+else { $exe = "dist\Finance_Dojo\Finance_Dojo.exe" }
 if (-not (Test-Path $exe)) { throw "Build finished but $exe was not found." }
 
 Step "Self-test of the built exe (opens every screen in both themes, checks calculations)"
@@ -56,9 +56,9 @@ if ($p.ExitCode -ne 0) { throw "The exe self-test failed (exit code $($p.ExitCod
 
 if (-not $OneFile) {
     Step "Zipping the app folder for sharing"
-    $zip = "dist\Finance_Commercial_Training_Windows.zip"
+    $zip = "dist\Finance_Dojo_Windows.zip"
     if (Test-Path $zip) { Remove-Item $zip }
-    Compress-Archive -Path "dist\Finance_Commercial_Training" -DestinationPath $zip
+    Compress-Archive -Path "dist\Finance_Dojo" -DestinationPath $zip
     Write-Host "Zip: $((Resolve-Path $zip).Path)"
 }
 Write-Host "`nBuilt: $((Resolve-Path $exe).Path)" -ForegroundColor Green
