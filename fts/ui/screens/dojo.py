@@ -215,7 +215,8 @@ class DojoScreen(Screen):
                       f"• Practical task saved: {gamify.TASK_XP}  •  Lesson finished: {gamify.LESSON_XP}\n"
                       f"• Daily quest: {gamify.QUEST_XP}  •  Quick-fire: {gamify.PRACTICE_XP}  •  "
                       f"Focus session: {gamify.FOCUS_XP}\n"
-                      f"• Hitting your daily goal: +{gamify.DAILY_GOAL_BONUS} bonus\n"
+                      f"• Hitting your daily goal: +{gamify.DAILY_GOAL_BONUS} bonus  •  "
+                      f"Career Mode boss beaten: {gamify.BOSS_XP}\n"
                       "Revealed solutions earn no XP, just like in your skill scores. Your streak survives "
                       "one rest day in a row, and XP never goes down.", "Muted"))
         self.body.addWidget(how)

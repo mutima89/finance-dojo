@@ -28,6 +28,7 @@ APP_TITLE = "Finance Dojo"
 # key: (navigation title, module path, class name)
 SCREENS = {
     "home": ("Home", "home", "HomeScreen"),
+    "career": ("Career Mode", "career", "CareerScreen"),
     "dojo": ("Daily Dojo", "dojo", "DojoScreen"),
     "roadmap": ("Training Roadmap", "roadmap", "RoadmapScreen"),
     "lessons": ("Module Lessons", "lessons", "LessonsScreen"),
@@ -45,7 +46,7 @@ SCREENS = {
 
 # sidebar sections: (header, [(screen key, icon)])
 NAV_GROUPS = [
-    ("START", [("home", "🏠"), ("dojo", "🎲"), ("roadmap", "🗺")]),
+    ("START", [("home", "🏠"), ("career", "🎮"), ("dojo", "🎲"), ("roadmap", "🗺")]),
     ("LEARN", [("lessons", "📘"), ("capstone", "🏆"), ("reference", "💼")]),
     ("PRACTISE", [("calculator", "🧮"), ("excel_center", "📊"), ("rm_simulator", "🏨"), ("fpa_lab", "📈"),
                   ("scenario", "🔀"), ("business_case", "⚖")]),
@@ -55,6 +56,7 @@ NAV_GROUPS = [
 # (keys, description, action name on MainWindow)
 SHORTCUTS = [
     ("Ctrl+H", "Home", "go_home"),
+    ("Ctrl+G", "Career Mode (the game map)", "go_career"),
     ("Ctrl+D", "Daily Dojo (today's quests)", "go_dojo"),
     ("Ctrl+L", "Continue your next lesson step", "go_next_step"),
     ("Ctrl+Right", "Next step inside a lesson", "lesson_next"),
@@ -176,9 +178,6 @@ class MainWindow(QMainWindow):
         brand = QLabel("◆ Finance Dojo")
         brand.setObjectName("Brand")
         sl.addWidget(brand)
-        tagline = QLabel("Finance & commercial training")
-        tagline.setObjectName("BrandSub")
-        sl.addWidget(tagline)
         self.xp_panel = XpPanel(self.ctx)
         self.xp_panel.focus_done.connect(self._focus_done)
         sl.addWidget(self.xp_panel)
@@ -201,7 +200,7 @@ class MainWindow(QMainWindow):
                 self.nav.addItem(it)
         self.nav.currentItemChanged.connect(self._nav_changed)
         sl.addWidget(self.nav, 1)
-        foot = QLabel("Offline · fictional training data · not a certification · F1 shortcuts")
+        foot = QLabel("Fictional data · not a certification")
         foot.setObjectName("Muted")
         foot.setWordWrap(True)
         sl.addWidget(foot)
@@ -259,6 +258,9 @@ class MainWindow(QMainWindow):
     # keyboard shortcuts -------------------------------------------------------
     def go_home(self):
         self.navigate("home")
+
+    def go_career(self):
+        self.navigate("career")
 
     def go_dojo(self):
         self.navigate("dojo")

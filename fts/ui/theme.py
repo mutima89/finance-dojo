@@ -61,8 +61,8 @@ QFrame#Sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }
 QLabel#Brand {{ font-size: {base_pt + 3}pt; font-weight: 700; color: {p.accent}; padding: 8px 6px 0px 6px; }}
 QLabel#BrandSub {{ color: {p.muted}; padding: 0px 6px 8px 26px; }}
 QListWidget#Nav {{ background: transparent; border: none; outline: 0; }}
-QListWidget#Nav::item {{ padding: 6px 10px; border-radius: 7px; margin: 0px 4px; color: {p.text2}; }}
-QListWidget#Nav::item:disabled {{ color: {p.muted}; background: transparent; padding: 8px 10px 2px 10px; }}
+QListWidget#Nav::item {{ padding: 5px 10px; border-radius: 7px; margin: 0px 4px; color: {p.text2}; }}
+QListWidget#Nav::item:disabled {{ color: {p.muted}; background: transparent; padding: 6px 10px 1px 10px; }}
 QListWidget#Nav::item:hover {{ background: {p.surface2}; }}
 QListWidget#Nav::item:selected {{ background: {p.accent}; color: {p.accent_text}; }}
 QPushButton {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 7px; padding: 7px 14px; }}
@@ -161,6 +161,12 @@ QFrame#Manager {{ background: {p.surface}; border: 1px solid {p.border}; border-
 QFrame#Welcome {{ background: {p.surface}; border: 2px solid {p.accent}; border-radius: 14px; }}
 QLabel#Avatar {{ background: {p.accent}; color: {p.accent_text}; border-radius: 22px; font-weight: 700;
     font-size: {base_pt + 3}pt; }}
+QFrame#Chapter {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 12px; }}
+QFrame#Chapter[state="done"] {{ border: 2px solid {p.good}; }}
+QFrame#Chapter[state="locked"] QLabel {{ color: {p.muted}; }}
+QFrame#Chapter[selected="true"] {{ border: 2px solid {p.accent}; }}
+QLabel#ChapterNum {{ background: {p.accent}; color: {p.accent_text}; border-radius: 15px; font-weight: 700; }}
+QLabel#Hearts {{ font-size: {base_pt + 6}pt; }}
 QFrame#Badge {{ background: {p.surface2}; border: 1px solid {p.border}; border-radius: 10px; }}
 QFrame#Badge[locked="true"] QLabel {{ color: {p.muted}; }}
 QFrame#Badge[locked="false"] {{ border: 2px solid {p.good}; }}

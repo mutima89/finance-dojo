@@ -409,3 +409,61 @@ def test_home_manager_note_and_welcome(tmp_path, monkeypatch):
     win2 = MainWindow()                                      # welcome only once
     assert not win2.screens["home"].welcome.isVisibleTo(win2.screens["home"])
     win2.close()
+
+
+def test_career_mode_boss_battles(env):
+    from fts.content import career
+    from fts.core.checker import format_value
+    win = env["win"]
+    db = win.db
+    db._x("DELETE FROM meta WHERE key LIKE 'boss:%'")
+    db._x("DELETE FROM xp WHERE source='boss'")
+    win.go_career()
+    assert win.current == "career"
+    c = win.screens["career"]
+    f, state, _btn = c.cards[2]
+    assert f.property("state") == "locked" and "Locked" in state.text()
+    c.select(1)
+    assert c.obj_rows[2][0].text().count("Boss") == 1
+    assert not c.obj_rows[2][1].isEnabled()          # lessons not finished yet
+    steps = career.chapters()[0].boss.steps
+    # losing all three lives: knocked out, nothing saved
+    c.start_boss(1)
+    for _ in range(3):
+        c.b_input.setText("1")
+        c.check()
+    assert c.hearts == 0 and c.b_retry.isEnabled() and not c.b_check.isEnabled()
+    assert db.meta("boss:1") is None and not db.has_xp("boss", "ch1")
+    c.b_input.setText("abc")                     # not a number: never costs a life
+    c.retry()
+    c.b_input.setText("abc")
+    c.check()
+    assert c.hearts == career.HEARTS
+    # win with one life lost: 2 stars, promotion, XP once
+    c.b_input.setText("1")
+    c.check()
+    for k, st in enumerate(steps):
+        c.b_input.setText(format_value(st.expected, st.unit, 2))
+        c.check()
+        if k < len(steps) - 1:
+            assert c.b_next.isEnabled()
+            c.next_step()
+    assert db.meta("boss:1") == "2"
+    assert db.has_xp("boss", "ch1")
+    xp = db.xp_total()
+    c.retry()                                    # replay with no mistakes: better stars, no more XP
+    for k, st in enumerate(steps):
+        c.b_input.setText(format_value(st.expected, st.unit, 2))
+        c.check()
+        if k < len(steps) - 1:
+            c.next_step()
+    assert db.meta("boss:1") == "3"
+    assert db.xp_total() == xp
+    c.back()
+    assert c.rank_lbl.text().endswith("Junior Analyst")
+    assert c.cards[2][0].property("state") == "open"
+    assert win.xp_panel.rank.text().endswith("Junior Analyst")
+    assert db.meta("badge:boss_slayer")
+    win.navigate("home")
+    assert "Chapter 2" in win.screens["home"].btn_career.text()
+    _no_errors(env)

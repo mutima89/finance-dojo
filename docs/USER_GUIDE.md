@@ -62,7 +62,8 @@ python3.12 -m venv .venv
 | Screen | What you do there |
 |---|---|
 | **Home** | A one-time welcome (name, daily goal, focus length), your next 5-minute step (one button), belt, streak and today's goal, a note from your fictional manager about the current module, then overall progress, mastery by skill, "resume where I left off" and weak topics |
-| **Daily Dojo** | Three one-minute quests from everyday life each day (coffee cart break-even, gym cost per visit, grocery budget variance, a side-hustle NPV and more), endless quick-fire practice, your belt path, 16 badges and XP for the last 14 days |
+| **Career Mode** | The game: a map of 9 chapters from Intern to Finance Director. Each chapter has a briefing from the fictional General Manager, two lessons to finish and a three-step boss with 3 lives. Beat it for up to 3 stars, +100 XP (once) and a promotion. The capstone is the final boss |
+| **Daily Dojo** | Three one-minute quests from everyday life each day (coffee cart break-even, gym cost per visit, grocery budget variance, a side-hustle NPV and more), endless quick-fire practice, your belt path, 18 badges and XP for the last 14 days |
 | **Training Roadmap** | The 8 modules, lesson status and the job-ready requirements |
 | **Module Lessons** | 16 lessons, each in 7 short steps (Learn, See it, Try with help, Try alone, Business view, Quiz, Task) with a "Next step" button. Every lesson opens with its key idea in one sentence and an everyday example |
 | **Financial Calculator** | Occupancy/ADR/RevPAR, variance, contribution & break-even, NPV/IRR/payback, time value of money, working capital. Each result shows its formula |
@@ -90,11 +91,11 @@ python3.12 -m venv .venv
 - **Focus timer.** Start a 5, 10, 15 or 25-minute focus block from the sidebar. When it ends you get XP and a reminder to take a short break.
 - **Your settings.** Pick a gentle (30 XP), steady (50 XP) or ambitious (100 XP) daily goal. Turn pop-ups off, or keep them and switch on *reduce motion* to drop the confetti and fades.
 - **One question at a time.** Quizzes show a single question with large answer buttons. You see straight away whether you were right, with the explanation, then move on. Dots at the top show how far you are. Only your best score counts, so you can retake a quiz whenever you like.
-- **Badges.** 16 badges (for example *Quiz ace*, *Quest sweep*, *On fire*, *Week warrior*) are shown in the Daily Dojo with a counter for how close you are. A new badge gets a pop-up. Badges give no XP.
-- **Keyboard shortcuts.** Ctrl+L continues your next step, Ctrl+Right / Ctrl+Left move between lesson steps, Ctrl+H goes Home, Ctrl+D opens the Daily Dojo, Ctrl+T starts or stops the focus timer and F1 lists them all.
+- **Badges.** 18 badges (for example *Boss slayer*, *Quiz ace*, *Quest sweep*, *On fire*, *Week warrior*) are shown in the Daily Dojo with a counter for how close you are. A new badge gets a pop-up. Badges give no XP.
+- **Keyboard shortcuts.** Ctrl+L continues your next step, Ctrl+G opens Career Mode, Ctrl+Right / Ctrl+Left move between lesson steps, Ctrl+H goes Home, Ctrl+D opens the Daily Dojo, Ctrl+T starts or stops the focus timer and F1 lists them all.
 - **Encouraging feedback.** Wrong answers get a specific diagnosis plus a short, kind nudge to try again.
 
-**How XP is earned:** an exercise solved on the first try gives 20 XP (15 if you used hints), 12 on the second try and 8 later. A revealed solution gives 0. Quizzes give 5 XP per correct answer, but only when you beat your best score. A saved practical task gives 25 and a finished lesson 50. Daily quests give 15, quick-fire practice 5 (the first 10 a day), a finished focus block 10, and reaching your daily goal a 20 XP bonus. Progress made before XP existed is credited once, dated when it happened.
+**How XP is earned:** an exercise solved on the first try gives 20 XP (15 if you used hints), 12 on the second try and 8 later. A revealed solution gives 0. Quizzes give 5 XP per correct answer, but only when you beat your best score. A saved practical task gives 25 and a finished lesson 50. Daily quests give 15, quick-fire practice 5 (the first 10 a day), a finished focus block 10, reaching your daily goal a 20 XP bonus, and beating a Career Mode boss 100 (once per boss). Progress made before XP existed is credited once, dated when it happened.
 
 **XP, belts and badges are for fun and momentum only.** They never change your skill scores or levels below, and a belt is not a qualification.
 

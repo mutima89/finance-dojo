@@ -184,6 +184,9 @@ class XpPanel(QFrame):
         self.streak.setObjectName("XpStreak")
         top.addWidget(self.streak)
         lay.addLayout(top)
+        self.rank = QLabel()
+        self.rank.setObjectName("XpSub")
+        lay.addWidget(self.rank)
         self.bar = QProgressBar()
         self.bar.setObjectName("XpBar")
         self.bar.setRange(0, 1000)
@@ -217,6 +220,8 @@ class XpPanel(QFrame):
 
     def refresh(self):
         db = self.ctx.db
+        from .screens.career import current_rank
+        self.rank.setText(f"🎖 Career: {current_rank(db)}")
         r = gamify.rank(db.xp_total())
         self.belt.setText(r.belt.name)
         self.belt_dot.setStyleSheet(f"background:{r.belt.color}; border-radius:7px; border:1px solid #888;")

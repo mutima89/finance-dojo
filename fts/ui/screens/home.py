@@ -84,6 +84,8 @@ class HomeScreen(Screen):
         btns.addWidget(self.btn_go)
         self.btn_quests = button("🎲 Daily quests", lambda: ctx.navigate("dojo"))
         btns.addWidget(self.btn_quests)
+        self.btn_career = button("🎮 Career Mode", lambda: ctx.navigate("career"))
+        btns.addWidget(self.btn_career)
         btns.addStretch(1)
         left.addLayout(btns)
         left.addStretch(1)
@@ -191,6 +193,11 @@ class HomeScreen(Screen):
         self.btn_quests.setText(f"🎲 Daily quests ({left} left)" if left else "🎲 Quick-fire practice")
         lesson, step, text = next_step(self.ctx)
         self._next = (lesson, step)
+        from .career import career_progress
+        states = career_progress(db)
+        nxt = next((s for s in states if not s.beaten), None)
+        self.btn_career.setText(f"🎮 Career · Chapter {nxt.chapter.number}" if nxt and nxt.chapter.boss
+                                else "🎮 Career · Final boss" if nxt else "🎮 Career · complete")
         num = curriculum.module_of_lesson(lesson.id).number if lesson else None
         subject, msg = story.note_for(num)
         self.mgr_from.setText(f"📩 Message from <b>{story.MANAGER}</b> · {story.MANAGER_ROLE}")
@@ -237,7 +244,8 @@ class HomeScreen(Screen):
         wl.addLayout(g)
         wl.addWidget(label("How it works: press <b>▶ Start now</b> for your next 5-minute step, do the "
                            "<b>Daily Dojo</b> quests for quick wins, and use the <b>focus timer</b> in the "
-                           "sidebar when your attention drifts. Press <b>F1</b> for keyboard shortcuts.",
+                           "sidebar when your attention drifts. Want a game? <b>🎮 Career Mode</b> takes you from "
+                           "intern to Finance Director, one boss at a time. Press <b>F1</b> for keyboard shortcuts.",
                            rich=True))
         row = QHBoxLayout()
         row.addWidget(button("Let's go ▶", self.finish_welcome, primary=True))

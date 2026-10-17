@@ -266,6 +266,9 @@ class Progress:
         return int(self._q("SELECT COUNT(*) n FROM xp WHERE source=? AND substr(ts,1,10)=?",
                            [source, day.isoformat()])[0]["n"])
 
+    def meta_count(self, prefix: str) -> int:
+        return int(self._q("SELECT COUNT(*) n FROM meta WHERE key LIKE ?", [prefix + "%"])[0]["n"])
+
     def xp_count(self, source: str) -> int:
         return int(self._q("SELECT COUNT(*) n FROM xp WHERE source=?", [source])[0]["n"])
 
@@ -328,5 +331,5 @@ class Progress:
         for t in ("attempts", "exercise_status", "quiz_answers", "quiz_results", "lesson_progress", "tasks",
                   "workbook_results", "capstone", "capstone_scores", "events", "xp"):
             self.conn.execute(f"DELETE FROM {t}")
-        self.conn.execute("DELETE FROM meta WHERE key IN ('last_lesson', 'xp_backfilled') OR key LIKE 'badge:%'")
+        self.conn.execute("DELETE FROM meta WHERE key IN ('last_lesson', 'xp_backfilled') OR key LIKE 'badge:%' OR key LIKE 'boss:%'")
         self.conn.commit()

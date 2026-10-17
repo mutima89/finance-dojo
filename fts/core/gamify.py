@@ -20,6 +20,7 @@ PRACTICE_DAILY_CAP = 10        # practice challenges that earn XP per day
 FOCUS_XP = 10
 FOCUS_DAILY_CAP = 6            # focus sessions that earn XP per day
 DAILY_GOAL_BONUS = 20
+BOSS_XP = 100                  # once per chapter boss in Career Mode
 DAILY_GOAL_CHOICES = (30, 50, 100)
 DEFAULT_DAILY_GOAL = 50
 FOCUS_CHOICES = (5, 10, 15, 25)
