@@ -60,7 +60,8 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 - **Fictional content:** the hotel, its manager, the bosses' numbers and the career ranks are invented for practice. Ranks are not job titles or qualifications.
 - **Checked visually:** the career map, a boss after a wrong answer and after a win, and Home, at 1366x768 in the dark theme.
 - **Self-test:** now 34 checks (15 screens x 2 themes + 4). Linux run: `RESULT: PASS`.
-- **Not yet done:** the Windows CI build for this version. MD asked for this work to go to a new repository, so it has not been pushed yet. Nobody has played it on a Windows 10/11 desktop.
+- **Real Windows ([GitHub Actions run](https://github.com/mutima89/finance-dojo/actions/runs/39072013866), Windows Server 2025):** tests **253 passed, 1 skipped** (LibreOffice is not installed there); `Finance_Dojo.exe` was built on Windows and its `--self-test` passed **34/34**, including Career Mode in both themes.
+- **Not yet done:** nobody has played Career Mode on a Windows 10/11 desktop.
 
 ## Usability update (welcome, one-question quiz, badges, grouped sidebar, shortcuts)
 - **Why:** a walkthrough at 1366x768 (a common laptop size) found a sidebar of 14 items that needed scrolling, quizzes shown as one long scroll of 3 questions, no first-run guidance and little sense of "why this topic now".
@@ -72,7 +73,7 @@ Date: 2026-10-16. Environment: Linux (Ubuntu 24.04 container) with Wine 9.0 for 
 - **Not yet done:** a person trying the welcome, quiz, badges and shortcuts on a Windows 10/11 desktop.
 
 ## Self-test built into the app
-`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (32/32 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
+`Finance_Dojo.exe --self-test` opens every screen in both themes using a throw-away data folder, so real progress is never touched. It also checks RevPAR, NPV and the answer-key grading, then writes `self_test_report.txt` and exits with code 0 (pass) or 1 (fail). `build_windows.ps1` runs it on the freshly built exe. Last results: `Finance_Dojo.exe` on Windows Server 2025 (GitHub Actions) `RESULT: PASS` (34/34 OK). Before the rename: Windows exe under Wine and the Linux build, both `RESULT: PASS` (29/29 OK).
 
 ## Known limitations
 - **Windows:** the exe is built and self-tested on Windows Server 2025 by GitHub Actions, but no person has yet run it on a Windows 10/11 desktop. Fonts there will be Segoe UI, and spacing may differ slightly from the screenshots.
