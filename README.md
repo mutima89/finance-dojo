@@ -18,6 +18,26 @@
 
 ---
 
+## What's new
+
+### Career Mode: Finance Dojo is now a game 🎮
+Play the whole course as a career at The Aurelia Grand (a fictional hotel). You start as an **Intern** and work your way up to **Finance Director**.
+
+- **9 chapters on a career map.** There is one chapter per module, and the capstone is the final boss. A chapter unlocks when you beat the one before it.
+- **Boss battles.** Each chapter ends with a three-step decision for the hotel, such as finding the RevPAR gap, calming an angry budget review or deciding whether a renovation pays off. You get 3 lives, and a wrong answer costs one. If you lose all three, you simply try again.
+- **Stars and promotions.** A win earns 1 to 3 stars, +100 XP and a new rank: Junior Analyst, then Analyst, Revenue Analyst and onwards.
+- **Story briefings.** Sofia Reyes, the hotel's (fictional) General Manager, explains why each chapter matters.
+- **Always in view.** Your rank shows in the sidebar and on Home. Ctrl+G opens the map, and there are two new badges to collect: *Boss slayer* and *Middle manager*.
+
+The finance maths, answer checking and skill levels are unchanged. Ranks are part of the game, not job titles or qualifications. [More about Career Mode ↓](#play-it-as-a-game-career-mode)
+
+<img src="docs/screenshots/career_dark.png" width="900" alt="Career Mode chapter map">
+
+### Earlier in v1.0.0
+A first-run welcome, quizzes that show one question at a time, badges, a grouped sidebar, keyboard shortcuts, the Daily Dojo with real-life quests, XP, belts, a forgiving streak and a focus timer.
+
+---
+
 ## Why this exists
 
 Many finance graduates know the theory but have rarely built a model, reconciled a budget or defended a recommendation. This simulator closes that gap with short lessons, realistic (fictional) data and instant feedback. Every exercise trains the four questions an analyst is paid to answer:
